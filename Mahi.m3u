@@ -437,7 +437,7 @@ https://server.thelegitpro.in/rongeentv/rongeentv/tracks-v1a1/mono.m3u8
 #EXTINF:-1 tvg-name="Discovery Kids" tvg-logo="https://i.ibb.co.com/1TPw2Rt/images-3.jpg",Discovery Kids
 https://discoverfilm-discoverfilm-1-nl.samsung.wurl.tv/playlist.m3u8
 #EXTINF:-1 tvg-name="Sports 18" tvg-logo="https://cloudtv.akamaized.net/anyott/images/CMS_BD/22a8244f-9923-497a-a626-768cdd2d4d3c_180x180_sports-18.jpg",Sports 18
-http://atg100.xyz/live/UL33K17/SYC4T9D/1090644.ts
+http://atg100.xyz/live/UL33K17/SYC4T9D/1090644.m3u8
 #EXTINF:-1 tvg-name="Al Jazeera News" tvg-logo="https://i.ibb.co.com/WKfBNBp/images-1.png",Al Jazeera News
 https://live-hls-web-aje-fa.getaj.net/AJE/index.m3u8
 #EXTINF:-1 tvg-name="Bhojpuri Cinema" tvg-logo="https://i.ibb.co.com/k84zD8T/images-1.png",Bhojpuri Cinema

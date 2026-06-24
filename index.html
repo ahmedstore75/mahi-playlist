@@ -4,62 +4,428 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SA IPTV BD LIVE</title>
-    <!-- Font Awesome CSS (Reliable CDN) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <!-- Hls.js -->
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: sans-serif; }
-        body { background-color: #0b0e14; color: #ffffff; overflow: hidden; }
-        .app-container { display: flex; width: 100vw; height: 100vh; }
-        
-        .sidebar { width: 240px; background-color: #000000; padding: 20px 15px; display: flex; flex-direction: column; justify-content: space-between; border-right: 1px solid #1a1a1a; position: fixed; height: 100vh; z-index: 100; }
-        
-        .logo-section h1 { font-size: 16px; color: #ffffff; margin-bottom: 25px; font-weight: 700; }
-        .logo-section h1 span { color: #ff0022; display: inline-block; }
-        
-        .nav-menu { display: flex; flex-direction: column; gap: 6px; flex-grow: 1; overflow-y: auto; }
-        .nav-item { display: flex; align-items: center; gap: 12px; color: #b3b3b3; text-decoration: none; padding: 10px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; }
-        .nav-item:hover, .nav-item.active { background-color: #ff0022; color: #ffffff; }
-        
-        .social-links { display: flex; gap: 15px; justify-content: center; padding-top: 15px; border-top: 1px solid #111; }
-        .social-links a { color: #b3b3b3; font-size: 18px; text-decoration: none; }
-        .social-links a:hover { color: #ff0022; }
-        
-        .main-content { margin-left: 240px; flex-grow: 1; padding: 20px 30px; width: calc(100% - 240px); height: 100vh; display: flex; flex-direction: column; }
-        .video-wrapper { width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 12px; overflow: hidden; }
-        video { width: 100%; height: 100%; }
-        
-        .cat-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .search-box input { background: #161a22; border: 1px solid #2a2f3b; padding: 8px; border-radius: 6px; color: #fff; width: 250px; }
-        
-        .channels-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; overflow-y: auto; padding-right: 10px; }
-        .channel-card { background: #161a22; border: 1px solid #2a2f3b; padding: 12px; border-radius: 8px; display: flex; align-items: center; gap: 12px; cursor: pointer; }
-        .channel-card:hover { border-color: #ff0022; }
-        
-        @media (max-width: 768px) {
-            .sidebar { width: 70px; padding: 10px 5px; }
-            .nav-item span { display: none; }
-            .main-content { margin-left: 70px; width: calc(100% - 70px); }
+        /* মেইন গ্লোবাল রুলস */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #0b0e14;
+            color: #ffffff;
+            overflow: hidden; /* পুরো পেজের মেইন স্ক্রলবার বন্ধ */
+        }
+
+        .app-container {
+            display: flex;
+            width: 100vw;
+            height: 100vh; 
+        }
+
+        /* ফিক্সড বাম পাশের সাইডবার */
+        .sidebar {
+            width: 240px;
+            background-color: #000000;
+            padding: 20px 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border-right: 1px solid #1a1a1a;
+            position: fixed;
+            height: 100vh;
+            z-index: 100;
+            flex-shrink: 0;
+        }
+
+        /* লোগো সেকশন: SA IPTV সাদা এবং BD LIVE লাল কালার */
+        .logo-section h1 {
+            font-size: 16px;
+            color: #ffffff;
+            margin-bottom: 25px;
+            font-weight: 700;
+            line-height: 1.3;
+        }
+        .logo-section h1 span {
+            color: #ff0022;
+            display: inline-block;
+        }
+
+        .nav-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+
+        .nav-menu::-webkit-scrollbar { width: 0px; }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #b3b3b3;
+            text-decoration: none;
+            padding: 10px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            transition: 0.3s;
+            white-space: nowrap;
+        }
+
+        .nav-item i {
+            font-size: 15px;
+            width: 20px;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background-color: #ff0022;
+            color: #ffffff;
+        }
+
+        /* সোশ্যাল লিংক স্টাইল */
+        .social-links {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            padding-top: 15px;
+            border-top: 1px solid #111;
+            flex-shrink: 0;
+        }
+
+        .social-links a {
+            color: #b3b3b3;
+            font-size: 16px;
+            transition: 0.3s;
+            text-decoration: none;
+        }
+
+        .social-links a:hover {
+            color: #ff0022;
+        }
+
+        /* ডান পাশের মেইন কন্টেন্ট এরিয়া */
+        .main-content {
+            margin-left: 240px;
+            flex-grow: 1;
+            padding: 20px 30px;
+            width: calc(100% - 240px);
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        /* টপ হেডার (ঘড়ি ও তারিখ) */
+        .top-header {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 15px;
+            flex-shrink: 0;
+        }
+
+        .time-widget {
+            text-align: right;
+            font-size: 16px;
+            color: #ffffff;
+            font-weight: bold;
+        }
+
+        .time-widget span {
+            font-size: 12px;
+            color: #888;
+        }
+
+        /* ভিডিও প্লেয়ার */
+        .player-container {
+            margin-bottom: 20px;
+            flex-shrink: 0;
+        }
+
+        .video-wrapper {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background-color: #000;
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 1px solid #2a2f3b;
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .player-overlay-top {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            right: 15px;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .score-badge {
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid #ff0022;
+            max-width: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #ff0022;
+            border-radius: 50%;
+            animation: blink 1s infinite;
+            flex-shrink: 0;
+        }
+
+        @keyframes blink { 50% { opacity: 0; } }
+
+        /* স্ক্রলেবল কন্টেন্ট এরিয়া */
+        .scrollable-content-area {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        .scrollable-content-area::-webkit-scrollbar { width: 6px; }
+        .scrollable-content-area::-webkit-scrollbar-thumb { background: #ff0022; border-radius: 3px; }
+
+        /* ক্যাটাগরি হেডার */
+        .cat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            gap: 15px;
+        }
+
+        .search-box {
+            position: relative;
+            width: 250px;
+            flex-shrink: 0;
+        }
+
+        .search-box input {
+            width: 100%;
+            background-color: #161a22;
+            border: 1px solid #2a2f3b;
+            padding: 8px 35px 8px 12px;
+            border-radius: 6px;
+            color: #fff;
+            outline: none;
+        }
+
+        .search-box i {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+        }
+
+        .category-tags {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            overflow-x: auto;
+            padding-bottom: 5px;
+        }
+
+        .category-tags::-webkit-scrollbar { height: 4px; }
+        .category-tags::-webkit-scrollbar-thumb { background: #2a2f3b; border-radius: 2px; }
+
+        .cat-btn {
+            background-color: #161a22;
+            color: #b3b3b3;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .cat-btn.active, .cat-btn:hover {
+            background-color: #ff0022;
+            color: #fff;
+        }
+
+        /* ২-কলাম বিশিষ্ট চ্যানেল গ্রিড */
+        .channels-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .channel-card {
+            background-color: #161a22;
+            border: 1px solid #2a2f3b;
+            border-radius: 8px;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: 0.3s;
+            overflow: hidden;
+        }
+
+        .channel-card:hover {
+            background-color: #1e2330;
+            border-color: #ff0022;
+        }
+
+        .channel-thumb {
+            width: 50px;
+            height: 38px;
+            object-fit: contain;
+            background-color: #0b0e14;
+            border-radius: 4px;
+            border: 1px solid #2a2f3b;
+            flex-shrink: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #ff0022;
+        }
+
+        .channel-info {
+            flex-grow: 1;
+            overflow: hidden;
+        }
+
+        .channel-info h4 {
+            font-size: 13px;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .cat-name {
+            font-size: 11px;
+            font-weight: 500;
+            color: #ff4444;
+        }
+
+        .play-icon {
+            color: #ff0022;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .loading-text {
+            grid-column: span 2;
+            text-align: center;
+            padding: 20px;
+            color: #888;
+        }
+
+        .app-footer {
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid #161a22;
+            padding-top: 15px;
+            color: #666;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+
+        /* ===================================================
+           MOBILE SCREEN RE-FIT
+           =================================================== */
+        @media screen and (max-width: 768px) {
+            .sidebar {
+                width: 75px; 
+                padding: 15px 4px 10px 4px;
+            }
+            
+            .logo-section h1 {
+                font-size: 10px;
+                text-align: center;
+                line-height: 1.2;
+                margin-bottom: 15px;
+            }
+            .logo-section h1 span { display: block; }
+
+            .nav-menu { gap: 2px; }
+
+            .nav-item {
+                flex-direction: column;
+                gap: 3px;
+                padding: 8px 2px;
+                font-size: 8px;
+                text-align: center;
+            }
+            .nav-item i { width: auto; font-size: 14px; }
+
+            .social-links { gap: 8px; padding-top: 10px; }
+            .social-links a { font-size: 13px; }
+
+            .main-content {
+                margin-left: 75px;
+                width: calc(100% - 75px);
+                padding: 12px;
+            }
+
+            .time-widget { font-size: 13px; }
+            .time-widget span { font-size: 10px; }
+
+            .cat-header h3 { font-size: 15px; }
+            .search-box { width: 140px; } 
+
+            .channels-grid { gap: 8px; }
+            .channel-card { padding: 8px; gap: 8px; }
+            .channel-thumb { width: 42px; height: 32px; font-size: 12px; }
+            .channel-info h4 { font-size: 11px; }
         }
     </style>
 </head>
 <body>
 
     <div class="app-container">
+        
         <aside class="sidebar">
-            <div class="logo-section"><h1>SA IPTV <br><span>BD LIVE</span></h1></div>
+            <div class="logo-section">
+                <h1>SA IPTV <br><span>BD LIVE</span></h1>
+            </div>
+            
             <nav class="nav-menu">
-                <a href="#" class="nav-item active"><i class="fa-solid fa-tv"></i> <span>LIVE TV</span></a>
-                <a href="#" class="nav-item"><i class="fa-solid fa-heart"></i> <span>FAVORITES</span></a>
-                <a href="#" class="nav-item"><i class="fa-solid fa-film"></i> <span>MOVIES</span></a>
-                <a href="#" class="nav-item"><i class="fa-solid fa-clapperboard"></i> <span>SERIES</span></a>
-                <a href="#" class="nav-item"><i class="fa-solid fa-trophy"></i> <span>SPORTS</span></a>
-                <a href="#" class="nav-item"><i class="fa-solid fa-child"></i> <span>KIDS</span></a>
-                <a href="#" class="nav-item"><i class="fa-solid fa-radio"></i> <span>RADIO</span></a>
-                <a href="#" class="nav-item"><i class="fa-solid fa-gear"></i> <span>SETTINGS</span></a>
+                <a href="#" class="nav-item active"><i class="fa-solid fa-tv"></i> LIVE TV</a>
+                <a href="#" class="nav-item"><i class="fa-solid fa-heart"></i> FAVORITES</a>
+                <a href="#" class="nav-item"><i class="fa-solid fa-film"></i> MOVIES</a>
+                <a href="#" class="nav-item"><i class="fa-solid fa-clapperboard"></i> SERIES</a>
+                <a href="#" class="nav-item"><i class="fa-solid fa-trophy"></i> SPORTS</a>
+                <a href="#" class="nav-item"><i class="fa-solid fa-child"></i> KIDS</a>
+                <a href="#" class="nav-item"><i class="fa-solid fa-radio"></i> RADIO</a>
+                <a href="#" class="nav-item"><i class="fa-solid fa-gear"></i> SETTINGS</a>
             </nav>
+
             <div class="social-links">
                 <a href="https://www.facebook.com/ahmed.bd.fb" target="_blank"><i class="fa-brands fa-facebook"></i></a>
                 <a href="https://telegram.org" target="_blank"><i class="fa-brands fa-telegram"></i></a>
@@ -68,68 +434,207 @@
         </aside>
 
         <main class="main-content">
-            <section class="video-wrapper">
-                <video id="video" controls autoplay playsinline></video>
+            
+            <header class="top-header">
+                <div class="time-widget">
+                    <i class="fa-regular fa-clock" style="color: #ff0022; margin-right: 5px;"></i> <span id="clock">--:-- --</span><br>
+                    <span id="date">Loading...</span>
+                </div>
+            </header>
+
+            <section class="player-container">
+                <div class="video-wrapper">
+                    <div class="player-overlay-top">
+                        <span class="score-badge"><span class="live-dot"></span> PLAYING: <span id="current-channel-title">Loading Playlist...</span></span>
+                    </div>
+                    <video id="video" controls autoplay playsinline></video>
+                </div>
             </section>
-            <br>
-            <div class="cat-header">
-                <h3>Channels</h3>
-                <div class="search-box"><input type="text" id="search" placeholder="Search..." oninput="filterChannels()"></div>
+
+            <div class="scrollable-content-area">
+                
+                <section class="category-section">
+                    <div class="cat-header">
+                        <h3>Categories</h3>
+                        <div class="search-box">
+                            <input type="text" id="search" placeholder="Search..." oninput="filterChannels()">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="category-tags" id="category-buttons-container">
+                        <button class="cat-btn active" onclick="selectCategory('ALL', this)">ALL</button>
+                        <button class="cat-btn" onclick="selectCategory('NEWS', this)">NEWS</button>
+                        <button class="cat-btn" onclick="selectCategory('ENTERTAINMENT', this)">ENTERTAINMENT</button>
+                        <button class="cat-btn" onclick="selectCategory('SPORTS', this)">SPORTS</button>
+                    </div>
+                </section>
+
+                <section class="channels-grid" id="channels-container">
+                    <div class="loading-text"><i class="fa-solid fa-spinner fa-spin"></i> Loading channels...</div>
+                </section>
+
+                <footer class="app-footer">
+                    <p>© 2026 SA IPTV BD LIVE</p>
+                    <p>Built with <span style="color: red;">&hearts;</span></p>
+                </footer>
+                
             </div>
-            <div class="channels-grid" id="channels-container"></div>
+
         </main>
     </div>
 
     <script>
+        let currentSelectedCategory = "ALL"; 
+
+        function updateClock() {
+            const now = new Date();
+            let hours = now.getHours();
+            let minutes = now.getMinutes();
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12 || 12;
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            document.getElementById('clock').innerHTML = hours + ':' + minutes + ' ' + ampm;
+            document.getElementById('date').innerHTML = now.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
         const m3uUrl = "https://raw.githubusercontent.com/abusaeeidx/Mrgify-BDIX-IPTV/main/playlist.m3u";
         let allChannels = [];
-        const video = document.getElementById('video');
-        let hlsPlayer = null;
 
-        async function loadData() {
-            const res = await fetch(m3uUrl);
-            const text = await res.text();
-            parseM3U(text);
+        async function loadM3UPlaylist() {
+            try {
+                const response = await fetch(m3uUrl);
+                if (!response.ok) throw new Error("Network Issue");
+                const m3uText = await response.text();
+                parseM3U(m3uText);
+            } catch (error) {
+                document.getElementById('channels-container').innerHTML = `<div class="loading-text" style="color: #ff0022;">Failed to load M3U playlist.</div>`;
+            }
         }
 
         function parseM3U(text) {
             const lines = text.split('\n');
+            let currentName = "";
+            let currentLogo = "";
+            let currentGroup = "ALL"; 
+
             for (let i = 0; i < lines.length; i++) {
-                if (lines[i].startsWith('#EXTINF:')) {
-                    const name = lines[i].split(',')[1];
-                    const url = lines[i+1];
-                    allChannels.push({name, url});
+                const line = lines[i].trim();
+
+                if (line.startsWith('#EXTINF:')) {
+                    const logoMatch = line.match(/tvg-logo="([^"]+)"/);
+                    currentLogo = logoMatch ? logoMatch[1] : "";
+
+                    const groupMatch = line.match(/group-title="([^"]+)"/);
+                    currentGroup = groupMatch ? groupMatch[1].toUpperCase() : "ALL";
+
+                    const nameIndex = line.lastIndexOf(',');
+                    if (nameIndex !== -1) {
+                        currentName = line.substring(nameIndex + 1).trim();
+                    }
+                } else if (line.startsWith('http')) {
+                    if (currentName) {
+                        allChannels.push({
+                            name: currentName,
+                            url: line,
+                            logo: currentLogo,
+                            group: currentGroup
+                        });
+                        currentName = ""; 
+                        currentLogo = "";
+                        currentGroup = "ALL";
+                    }
                 }
             }
-            renderChannels(allChannels);
-            if(allChannels.length > 0) play(allChannels[0].url);
+            filterChannels(); 
+
+            if (allChannels.length > 0) {
+                playLiveStream(allChannels[0].url, allChannels[0].name);
+            }
         }
 
-        function renderChannels(list) {
-            const container = document.getElementById('channels-container');
-            container.innerHTML = list.map((ch, idx) => `
-                <div class="channel-card" onclick="play('${ch.url}')">
-                    <i class="fa-solid fa-play" style="color:#ff0022"></i>
-                    <div>${ch.name}</div>
-                </div>
-            `).join('');
-        }
-
-        function play(url) {
-            video.muted = false; // অটো সাউন্ডের জন্য
-            if (hlsPlayer) hlsPlayer.destroy();
-            hlsPlayer = new Hls();
-            hlsPlayer.loadSource(url);
-            hlsPlayer.attachMedia(video);
-            video.play();
+        function selectCategory(categoryName, element) {
+            currentSelectedCategory = categoryName.toUpperCase();
+            const buttons = document.querySelectorAll('.cat-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            element.classList.add('active');
+            filterChannels();
         }
 
         function filterChannels() {
-            const val = document.getElementById('search').value.toLowerCase();
-            renderChannels(allChannels.filter(c => c.name.toLowerCase().includes(val)));
+            const searchQuery = document.getElementById('search').value.toLowerCase();
+            const filtered = allChannels.filter(channel => {
+                const matchesSearch = channel.name.toLowerCase().includes(searchQuery);
+                if (currentSelectedCategory === "ALL") {
+                    return matchesSearch;
+                } else {
+                    const matchesCategory = channel.group.includes(currentSelectedCategory);
+                    return matchesSearch && matchesCategory;
+                }
+            });
+            displayChannels(filtered);
         }
 
-        loadData();
+        function displayChannels(channels) {
+            const container = document.getElementById('channels-container');
+            container.innerHTML = "";
+
+            if (channels.length === 0) {
+                container.innerHTML = `<div class="loading-text">No channels found in this category.</div>`;
+                return;
+            }
+
+            channels.forEach((channel, index) => {
+                const serialNum = String(index + 1).padStart(2, '0');
+                const card = document.createElement('div');
+                card.className = 'channel-card';
+                card.onclick = () => playLiveStream(channel.url, channel.name);
+
+                const logoHtml = channel.logo ? `<img src="${channel.logo}" alt="" class="channel-thumb">` : `<div class="channel-thumb"><i class="fa-solid fa-tv"></i></div>`;
+
+                card.innerHTML = `
+                    ${logoHtml}
+                    <div class="channel-info">
+                        <h4>${serialNum} | ${channel.name}</h4>
+                        <p class="cat-name">Live Stream</p>
+                    </div>
+                    <i class="fa-solid fa-play play-icon"></i>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        const video = document.getElementById('video');
+        let hlsPlayer = null;
+
+        function playLiveStream(url, name) {
+            document.getElementById('current-channel-title').innerText = name;
+
+            video.muted = false;
+            video.volume = 1.0;
+
+            if (hlsPlayer) hlsPlayer.destroy();
+
+            if (Hls.isSupported()) {
+                hlsPlayer = new Hls();
+                hlsPlayer.loadSource(url);
+                hlsPlayer.attachMedia(video);
+                hlsPlayer.on(Hls.Events.MANIFEST_PARSED, function() {
+                    video.play().catch(() => {
+                        console.log("Autoplay with sound was prevented by browser policy.");
+                    });
+                });
+            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                video.src = url;
+                video.addEventListener('loadedmetadata', function() {
+                    video.play();
+                });
+            }
+        }
+
+        window.onload = loadM3UPlaylist;
     </script>
 </body>
 </html>

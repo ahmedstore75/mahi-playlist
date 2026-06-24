@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SA IPTV BD LIVE</title>
+    <!-- Font Awesome Icons for Sidebar -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Hls.js Library for M3U/M3U8 Streaming -->
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    
+    <style>
+        /* মেইন গ্লোবাল স্টাইল */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #0b0e14;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* সাইডবার ডিজাইন */
+        .sidebar {
+            width: 240px;
+            background-color: #000000;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border-right: 1px solid #1a1a1a;
+            position: fixed;
+            height: 100vh;
+            z-index: 100;
+        }
+
+        .logo-section h1 {
+            font-size: 20px;
+            color: #fff;
+            margin-bottom: 30px;
+            font-weight: 700;
+        }
+        .logo-section h1 span {
+            color: #ff0022;
+        }
+
+        .nav-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex-grow: 1;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: #b3b3b3;
+            text-decoration: none;
+            padding: 12px 15px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .nav-item i {
+            font-size: 16px;
+            width: 20px;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background-color: #ff0022;
+            color: #ffffff;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            padding-top: 20px;
+        }
+
+        .social-links a {
+            color: #b3b3b3;
+            font-size: 18px;
+            transition: 0.3s;
+        }
+
+        .social-links a:hover {
+            color: #ff0022;
+        }
+
+        /* মেইন কনটেন্ট এরিয়া */
+        .main-content {
+            margin-left: 240px;
+            flex-grow: 1;
+            padding: 20px 30px;
+        }
+
+        /* টপ হেডার (সময় ও তারিখ) */
+        .top-header {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 15px;
+        }
+
+        .time-widget {
+            text-align: right;
+            font-size: 16px;
+            color: #ffffff;
+            font-weight: bold;
+        }
+
+        .time-widget span {
+            font-size: 12px;
+            color: #888;
+            font-weight: normal;
+        }
+
+        /* ভিডিও প্লেয়ার ডিজাইন */
+        .player-container {
+            margin-bottom: 25px;
+        }
+
+        .video-wrapper {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background-color: #000;
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 1px solid #2a2f3b;
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .player-overlay-top {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            display: flex;
+            align-items: center;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .score-badge {
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid #ff0022;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #ff0022;
+            border-radius: 50%;
+            display: inline-block;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink { 50% { opacity: 0; } }
+
+        /* ক্যাটাগরি এবং সার্চ সেকশন */
+        .cat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .search-box {
+            position: relative;
+            width: 250px;
+        }
+
+        .search-box input {
+            width: 100%;
+            background-color: #161a22;
+            border: 1px solid #2a2f3b;
+            padding: 8px 35px 8px 12px;
+            border-radius: 6px;
+            color: #fff;
+            outline: none;
+        }
+
+        .search-box i {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+        }
+
+        .category-tags {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .cat-btn {
+            background-color: #161a22;
+            color: #b3b3b3;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .cat-btn:hover, .cat-btn.active {
+            background-color: #ff0022;
+            color: #fff;
+        }
+
+        /* চ্যানেল গ্রিড লেআউট (আগের মতো ২ কলাম) */
+        .channels-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+            max-height: 450px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        .channels-grid::-webkit-scrollbar { width: 6px; }
+        .channels-grid::-webkit-scrollbar-thumb { background: #ff0022; border-radius: 3px; }
+
+        .channel-card {
+            background-color: #161a22;
+            border: 1px solid #2a2f3b;
+            border-radius: 8px;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .channel-card:hover {
+            background-color: #1e2330;
+            border-color: #ff0022;
+        }
+
+        .channel-thumb {
+            width: 60px;
+            height: 40px;
+            object-fit: contain;
+            background-color: #0b0e14;
+            border-radius: 4px;
+            padding: 2px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #ff0022;
+            font-size: 16px;
+            border: 1px solid #2a2f3b;
+        }
+
+        .channel-info {
+            flex-grow: 1;
+        }
+
+        .channel-info h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+
+        .cat-name {
+            font-size: 11px;
+            font-weight: 500;
+            color: #ff4444; /* লাইভ ট্যাগ কালার */
+        }
+
+        .play-icon {
+            color: #ff0022;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .loading-text {
+            grid-column: span 2;
+            text-align: center;
+            padding: 20px;
+            color: #888;
+            font-size: 14px;
+        }
+
+        /* ফুটার */
+        .app-footer {
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid #161a22;
+            padding-top: 15px;
+            color: #666;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        
+        <!-- SIDEBAR NAVIGATION -->
+        <aside class="sidebar">
+            <div class="logo-section">
+                <h1>SA IPTV <span>BD LIVE</span></h1>
+            </div>
+            
+            <nav class="nav-menu">
+                <a href="#" class="nav-item active"><i class="fa-solid fa-tv"></i> LIVE TV</a>
+                <a href="#" class="nav-item"><i class="fa-solid fa-heart"></i> FAVORITES</a>
+                <a href="#" class="nav-item"><i class="fa-solid fa-film"></i> MOVIES</a>
+                <a href="#" class="nav-item"><i class="fa-solid fa-clapperboard"></i> SERIES</a>
+                <a href="#" class="nav-item"><i class="fa-solid fa-trophy"></i> SPORTS</a>
+                <a href="#" class="nav-item"><i class="fa-solid fa-child"></i> KIDS</a>
+                <a href="#" class="nav-item"><i class="fa-solid fa-radio"></i> RADIO</a>
+                <a href="#" class="nav-item"><i class="fa-solid fa-gear"></i> SETTINGS</a>
+            </nav>
+
+            <div class="social-links">
+                <a href="#"><i class="fa-brands fa-facebook"></i></a>
+                <a href="#"><i class="fa-brands fa-telegram"></i></a>
+                <a href="#"><i class="fa-brands fa-youtube"></i></a>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT AREA -->
+        <main class="main-content">
+            
+            <!-- TOP BAR -->
+            <header class="top-header">
+                <div class="time-widget">
+                    <i class="fa-regular fa-clock" style="color: #ff0022; margin-right: 5px;"></i> <span id="clock">--:-- --</span><br>
+                    <span id="date">Loading Date...</span>
+                </div>
+            </header>
+
+            <!-- VIDEO PLAYER CONTAINER -->
+            <section class="player-container">
+                <div class="video-wrapper">
+                    <div class="player-overlay-top">
+                        <span class="score-badge"><span class="live-dot"></span> LIVE PLAYING: <span id="current-channel-title">Loading Playlist...</span></span>
+                    </div>
+                    <video id="video" controls autoplay muted></video>
+                </div>
+            </section>
+
+            <!-- CATEGORIES & SEARCH -->
+            <section class="category-section">
+                <div class="cat-header">
+                    <h3>Categories</h3>
+                    <div class="search-box">
+                        <input type="text" id="search" placeholder="Search channel..." oninput="filterChannels()">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </div>
+                </div>
+                
+                <div class="category-tags">
+                    <button class="cat-btn active">ALL</button>
+                    <button class="cat-btn">NEWS</button>
+                    <button class="cat-btn">ENTERTAINMENT</button>
+                    <button class="cat-btn">SPORTS</button>
+                    <button class="cat-btn">MOVIES</button>
+                    <button class="cat-btn">KIDS</button>
+                    <button class="cat-btn">MUSIC</button>
+                </div>
+            </section>
+
+            <!-- CHANNELS GRID (আগের মতোই ২ কলামের ডাইনামিক গ্রিড) -->
+            <section class="channels-grid" id="channels-container">
+                <div class="loading-text"><i class="fa-solid fa-spinner fa-spin"></i> Loading channels from M3U playlist...</div>
+            </section>
+
+            <!-- FOOTER -->
+            <footer class="app-footer">
+                <p>© 2026 SA IPTV BD LIVE. All Rights Reserved.</p>
+                <p>Built with <span style="color: red;">&hearts;</span> for you</p>
+            </footer>
+
+        </main>
+    </div>
+
+    <!-- JAVASCRIPT FOR M3U PARSING & STREAMING -->
+    <script>
+        // ১. লাইভ ঘড়ি আপডেট করার স্ক্রিপ্ট
+        function updateClock() {
+            const now = new Date();
+            let hours = now.getHours();
+            let minutes = now.getMinutes();
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12 || 12;
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            document.getElementById('clock').innerHTML = hours + ':' + minutes + ' ' + ampm;
+            document.getElementById('date').innerHTML = now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // ২. আপনার দেওয়া M3U প্লেলিস্ট ফাইলের লিংক
+        const m3uUrl = "https://raw.githubusercontent.com/ahmedstore75/Iptvbdlive/refs/heads/main/mixiptvchannel.m3u";
+        let allChannels = [];
+
+        // ৩. ব্যাকগ্রাউন্ডে প্লেলিস্ট লোড করার ফাংশন
+        async function loadM3UPlaylist() {
+            try {
+                const response = await fetch(m3uUrl);
+                if (!response.ok) throw new Error("Network issue");
+                const m3uText = await response.text();
+                parseM3UData(m3uText);
+            } catch (error) {
+                document.getElementById('channels-container').innerHTML = `<div class="loading-text" style="color: #ff0022;">Failed to load M3U playlist. Check connection.</div>`;
+            }
+        }
+
+        // ৪. M3U ডেটা থেকে চ্যানেল ও লিংক আলাদা করার লজিক
+        function parseM3UData(text) {
+            const lines = text.split('\n');
+            let currentName = "";
+            let currentLogo = "";
+
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i].trim();
+
+                if (line.startsWith('#EXTINF:')) {
+                    // লোগো থাকলে তা বের করার চেষ্টা
+                    const logoMatch = line.match(/tvg-logo="([^"]+)"/);
+                    currentLogo = logoMatch ? logoMatch[1] : "";
+
+                    // চ্যানেলের নাম বের করা (কমা চিহ্নের পরের অংশ)
+                    const nameIndex = line.lastIndexOf(',');
+                    if (nameIndex !== -1) {
+                        currentName = line.substring(nameIndex + 1).trim();
+                    }
+                } else if (line.startsWith('http')) {
+                    if (currentName) {
+                        allChannels.push({
+                            name: currentName,
+                            url: line,
+                            logo: currentLogo
+                        });
+                        currentName = ""; // রিসেট
+                        currentLogo = "";
+                    }
+                }
+            }
+            displayChannels(allChannels);
+
+            // প্লেলিস্ট লোড হতেই প্রথম চ্যানেলটি অটোমেটিক প্লে হবে
+            if (allChannels.length > 0) {
+                playLiveStream(allChannels[0].url, allChannels[0].name);
+            }
+        }
+
+        // ৫. আগের ডিজাইনের অবিকল ২-কলামের কার্ড তৈরি করা
+        function displayChannels(channels) {
+            const container = document.getElementById('channels-container');
+            container.innerHTML = "";
+
+            if (channels.length === 0) {
+                container.innerHTML = `<div class="loading-text">No channels found.</div>`;
+                return;
+            }
+
+            channels.forEach((channel, index) => {
+                // সিরিয়াল নম্বর ফরম্যাট করা (যেমন: 01, 02, 09, 10)
+                const serialNum = String(index + 1).padStart(2, '0');
+                
+                const card = document.createElement('div');
+                card.className = 'channel-card';
+                card.onclick = () => playLiveStream(channel.url, channel.name);
+
+                // যদি প্লেলিস্টে লোগো না থাকে, তবে একটি টিভি আইকন ডিফল্ট বসবে
+                const logoHtml = channel.logo ? `<img src="${channel.logo}" alt="" class="channel-thumb">` : `<div class="channel-thumb"><i class="fa-solid fa-tv"></i></div>`;
+
+                card.innerHTML = `
+                    ${logoHtml}
+                    <div class="channel-info">
+                        <h4>${serialNum} | ${channel.name}</h4>
+                        <p class="cat-name">Live Stream</p>
+                    </div>
+                    <i class="fa-solid fa-play play-icon"></i>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // ৬. সার্চ ফিল্টারিং লজিক
+        function filterChannels() {
+            const query = document.getElementById('search').value.toLowerCase();
+            const filtered = allChannels.filter(channel => channel.name.toLowerCase().includes(query));
+            displayChannels(filtered);
+        }
+
+        // ৭. Hls.js দিয়ে ভিডিও প্লেয়ারে স্ট্রিম রান করা
+        const video = document.getElementById('video');
+        let hlsPlayer = null;
+
+        function playLiveStream(url, name) {
+            document.getElementById('current-channel-title').innerText = name;
+
+            if (hlsPlayer) {
+                hlsPlayer.destroy();
+            }
+
+            if (Hls.isSupported()) {
+                hlsPlayer = new Hls();
+                hlsPlayer.loadSource(url);
+                hlsPlayer.attachMedia(video);
+                hlsPlayer.on(Hls.Events.MANIFEST_PARSED, function() {
+                    video.play().catch(() => console.log("Autoplay click needed."));
+                });
+            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                video.src = url;
+                video.addEventListener('loadedmetadata', function() {
+                    video.play();
+                });
+            } else {
+                alert("Your browser does not support live M3U8 streaming.");
+            }
+        }
+
+        // উইন্ডো লোড হলে রান হবে
+        window.onload = loadM3UPlaylist;
+    </script>
+</body>
+</html>

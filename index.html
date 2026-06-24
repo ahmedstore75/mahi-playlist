@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SA IPTV BD LIVE</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Hls.js Library for M3U Streaming -->
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     
     <style>
@@ -410,6 +412,7 @@
 
     <div class="app-container">
         
+        <!-- SIDEBAR NAVIGATION -->
         <aside class="sidebar">
             <div class="logo-section">
                 <h1>SA IPTV <br><span>BD LIVE</span></h1>
@@ -426,6 +429,7 @@
                 <a href="#" class="nav-item"><i class="fa-solid fa-gear"></i> SETTINGS</a>
             </nav>
 
+            <!-- সোশ্যাল লিঙ্ক সেকশন -->
             <div class="social-links">
                 <a href="https://www.facebook.com/ahmed.bd.fb" target="_blank"><i class="fa-brands fa-facebook"></i></a>
                 <a href="https://telegram.org" target="_blank"><i class="fa-brands fa-telegram"></i></a>
@@ -433,8 +437,10 @@
             </div>
         </aside>
 
+        <!-- MAIN CONTENT AREA -->
         <main class="main-content">
             
+            <!-- TOP BAR -->
             <header class="top-header">
                 <div class="time-widget">
                     <i class="fa-regular fa-clock" style="color: #ff0022; margin-right: 5px;"></i> <span id="clock">--:-- --</span><br>
@@ -442,6 +448,7 @@
                 </div>
             </header>
 
+            <!-- VIDEO PLAYER (সাউন্ড ফিক্সড করতে 'muted' রিমুভ করা হয়েছে) -->
             <section class="player-container">
                 <div class="video-wrapper">
                     <div class="player-overlay-top">
@@ -451,8 +458,10 @@
                 </div>
             </section>
 
+            <!-- স্ক্রলেবল কন্টেন্ট এরিয়া -->
             <div class="scrollable-content-area">
                 
+                <!-- CATEGORIES & SEARCH -->
                 <section class="category-section">
                     <div class="cat-header">
                         <h3>Categories</h3>
@@ -470,10 +479,12 @@
                     </div>
                 </section>
 
+                <!-- CHANNELS GRID -->
                 <section class="channels-grid" id="channels-container">
                     <div class="loading-text"><i class="fa-solid fa-spinner fa-spin"></i> Loading channels...</div>
                 </section>
 
+                <!-- FOOTER -->
                 <footer class="app-footer">
                     <p>© 2026 SA IPTV BD LIVE</p>
                     <p>Built with <span style="color: red;">&hearts;</span></p>
@@ -484,6 +495,7 @@
         </main>
     </div>
 
+    <!-- JAVASCRIPT FOR DYNAMIC M3U, FILTER & STREAMING -->
     <script>
         let currentSelectedCategory = "ALL"; 
 
@@ -500,7 +512,7 @@
         setInterval(updateClock, 1000);
         updateClock();
 
-        const m3uUrl = "https://raw.githubusercontent.com/abusaeeidx/Mrgify-BDIX-IPTV/main/playlist.m3u";
+        const m3uUrl = "https://raw.githubusercontent.com/ahmedstore75/Iptvbdlive/refs/heads/main/mixiptvchannel.m3u";
         let allChannels = [];
 
         async function loadM3UPlaylist() {
@@ -609,9 +621,11 @@
         const video = document.getElementById('video');
         let hlsPlayer = null;
 
+        // সাউন্ড অটোমেটিক অন করার জন্য ফাংশন
         function playLiveStream(url, name) {
             document.getElementById('current-channel-title').innerText = name;
 
+            // ভিডিও আনমিউট এবং ফুল ভলিউম নিশ্চিত করা
             video.muted = false;
             video.volume = 1.0;
 
@@ -623,6 +637,7 @@
                 hlsPlayer.attachMedia(video);
                 hlsPlayer.on(Hls.Events.MANIFEST_PARSED, function() {
                     video.play().catch(() => {
+                        // যদি ব্রাউজার অটো-সাউন্ড ব্লক করে, তবে ইউজার ইন্টারেকশনের মাধ্যমে প্লে করার চেষ্টা করবে
                         console.log("Autoplay with sound was prevented by browser policy.");
                     });
                 });

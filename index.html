@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SA IPTV BD LIVE</title>
-    <!-- Font Awesome Icons (Reliable CDN for GitHub) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <!-- Hls.js Library for M3U Streaming -->
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     
     <style>
@@ -416,7 +414,6 @@
 
     <div class="app-container">
         
-        <!-- SIDEBAR NAVIGATION -->
         <aside class="sidebar">
             <div class="logo-section">
                 <h1>SA IPTV <br><span>BD LIVE</span></h1>
@@ -438,7 +435,6 @@
                 <a onclick="syncCategory('Favorites', this)" class="nav-item" data-cat="Favorites"><i class="fa-solid fa-heart"></i> FAVORITES</a>
             </nav>
 
-            <!-- সোশ্যাল লিঙ্ক সেকশন -->
             <div class="social-links">
                 <a href="https://www.facebook.com/ahmed.bd.fb" target="_blank"><i class="fa-brands fa-facebook"></i></a>
                 <a href="https://telegram.org" target="_blank"><i class="fa-brands fa-telegram"></i></a>
@@ -446,10 +442,8 @@
             </div>
         </aside>
 
-        <!-- MAIN CONTENT AREA -->
         <main class="main-content">
             
-            <!-- TOP BAR -->
             <header class="top-header">
                 <div class="time-widget">
                     <i class="fa-regular fa-clock" style="color: #ff0022; margin-right: 5px;"></i> <span id="clock">--:-- --</span><br>
@@ -457,7 +451,6 @@
                 </div>
             </header>
 
-            <!-- VIDEO PLAYER -->
             <section class="player-container">
                 <div class="video-wrapper">
                     <div class="player-overlay-top" id="player-badge-overlay">
@@ -467,10 +460,8 @@
                 </div>
             </section>
 
-            <!-- স্ক্রলেবল কন্টেন্ট এরিয়া -->
             <div class="scrollable-content-area">
                 
-                <!-- CATEGORIES & SEARCH -->
                 <section class="category-section">
                     <div class="cat-header">
                         <h3>Categories</h3>
@@ -497,12 +488,10 @@
                     </div>
                 </section>
 
-                <!-- CHANNELS GRID -->
                 <section class="channels-grid" id="channels-container">
                     <div class="loading-text"><i class="fa-solid fa-spinner fa-spin"></i> Loading channels...</div>
                 </section>
 
-                <!-- FOOTER -->
                 <footer class="app-footer">
                     <p>© 2026 SA IPTV BD LIVE</p>
                     <p>Built with <span style="color: red;">&hearts;</span></p>
@@ -513,7 +502,6 @@
         </main>
     </div>
 
-    <!-- JAVASCRIPT FOR DYNAMIC M3U, FILTER & STREAMING -->
     <script>
         let currentSelectedCategory = "ALL"; 
         let badgeTimeout = null;
@@ -649,16 +637,16 @@
         const video = document.getElementById('video');
         let hlsPlayer = null;
 
-        // ব্যালেন্সড ও অ্যান্টি-স্টাকিং কনফিগারেশন (ভিডিও আটকানো রোধ করতে)
-        const stableHlsConfig = {
+        // অগ্রিম ম্যাক্সিমাম ডাটা লোড করার জন্য হাই-বাফার কনফিগারেশন 
+        const aggressiveBufferConfig = {
             enableWorker: true,
-            maxBufferLength: 20,                 // বাফার বাড়িয়ে ২০ সেকেন্ড করা হলো (ইন্টারনেট ফ্ল্যাকচুয়েট করলেও আটকাবে না)
-            maxMaxBufferLength: 40,
-            liveSyncDuration: 4.0,               // লাইভ ডিলে কিছুটা বাড়িয়ে স্টেবল রাখা হলো
-            liveMaxLatencyDuration: 8.0,         
-            maxBufferSize: 30 * 1024 * 1024,     // ৩০ মেগাবাইট বাফার সাইজ মেমোরি
-            lowLatencyMode: false,               // চরম বাফারিং এড়াতে অত্যন্ত কম লেটেন্সি মোড অফ রাখা ভালো
-            backBufferLength: 15
+            maxBufferLength: 90,                 // ইন্টারনেট ভালো থাকলে টানা ৯০ সেকেন্ডের ভিডিও অগ্রিম লোড করে রাখবে!
+            maxMaxBufferLength: 120,             // সর্বোচ্চ ১২০ সেকেন্ড (২ মিনিট) পর্যন্ত বাফার জমা করতে পারবে
+            maxBufferSize: 150 * 1024 * 1024,    // ব্রাউজার মেমোরিতে ১৫০ মেগাবাইট পর্যন্ত ভিডিও ডাটা ক্যাশ রাখার অনুমতি
+            liveSyncDuration: 10.0,              // লাইভ ব্রডকাস্ট থেকে ১০ সেকেন্ড পেছনে স্টার্ট হবে, যাতে বড় বাফার তৈরি হতে পারে
+            liveMaxLatencyDuration: 20.0,        // ২০ সেকেন্ড পর্যন্ত লেটেন্সি টলারেন্স (বাফারিং জমানোর জন্য অত্যন্ত জরুরী)
+            progressive: true,                   // ডাটা ক্রমান্বয়ে দ্রুত ডাউনলোড করতে সাহায্য করবে
+            backBufferLength: 30                 // পেছনের ৩০ সেকেন্ডের ভিডিও মেমোরিতে রাখবে যাতে রিওয়াইন্ড হলে বাফারিং না হয়
         };
 
         function playLiveStream(url, name) {
@@ -679,7 +667,8 @@
             if (hlsPlayer) hlsPlayer.destroy();
 
             if (Hls.isSupported()) {
-                hlsPlayer = new Hls(stableHlsConfig);
+                // নতুন অ্যাগ্রেসিভ বাফার কনফিগারেশন যোগ করা হলো
+                hlsPlayer = new Hls(aggressiveBufferConfig);
                 hlsPlayer.loadSource(url);
                 hlsPlayer.attachMedia(video);
                 
@@ -689,20 +678,20 @@
                     });
                 });
 
-                // স্মার্ট এরর ও বাফার স্টল হ্যান্ডলার (ভিডিও আটকে গেলে অটো-রিকভারি করবে)
+                // স্মার্ট নেটওয়ার্ক ডাউন ও বাফার রিকভারি
                 hlsPlayer.on(Hls.Events.ERROR, function (event, data) {
                     if (data.fatal) {
                         switch (data.type) {
                             case Hls.ErrorTypes.NETWORK_ERROR:
-                                console.log("Network error, trying to recover...");
+                                console.log("Network down. Trying to reconnect...");
                                 hlsPlayer.startLoad();
                                 break;
                             case Hls.ErrorTypes.MEDIA_ERROR:
-                                console.log("Media error, trying to recover...");
+                                console.log("Media stall detected. Recovering...");
                                 hlsPlayer.recoverMediaError();
                                 break;
                             default:
-                                console.log("Fatal error, re-loading stream...");
+                                console.log("Critical Error. Restarting stream...");
                                 playLiveStream(url, name);
                                 break;
                         }

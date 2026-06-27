@@ -488,7 +488,7 @@
                     <div class="cat-header">
                         <h3>Categories</h3>
                         <div class="search-box">
-                            <input type="text" id="search" placeholder="Search..." oninput="filterChannels()">
+                            <input type="text" id="search" placeholder="Search..." oninput="handleSearchInput()">
                             <i class="fa-solid fa-magnifying-glass"></i>
                         </div>
                     </div>
@@ -592,16 +592,13 @@
                 }
             }
             
-            // সব চ্যানেলকে মাত্র একবারের জন্য HTML হিসেবে জেনারেট করে রেখে দেওয়া হচ্ছে
             buildInitialDOMChannels(); 
 
-            // একদম প্রথমবার ফার্স্ট চ্যানেল অটো-প্লে
             if (allChannels.length > 0 && currentPlayingUrl === "") {
                 playLiveStream(allChannels[0].url, allChannels[0].name);
             }
         }
 
-        // সম্পূর্ণ নতুন সেফ মেথড: ডাটা কেবল একবার জেনারেট হবে
         function buildInitialDOMChannels() {
             const container = document.getElementById('channels-container');
             container.innerHTML = "";
@@ -611,7 +608,6 @@
                 const card = document.createElement('div');
                 
                 card.className = 'channel-card';
-                // ফিল্টারিং এর সুবিধার জন্য ডাটা অ্যাট্রিবিউট সেট করা হলো
                 card.setAttribute('data-url', channel.url);
                 card.setAttribute('data-name', channel.name.toLowerCase());
                 card.setAttribute('data-group', channel.group.toLowerCase());
@@ -634,9 +630,24 @@
             filterChannels();
         }
 
-        function syncCategory(categoryName, element) {
-            currentSelectedCategory = categoryName;
+        function handleSearchInput() {
+            const searchQuery = document.getElementById('search').value.trim();
+            
+            if (searchQuery.length > 0 && currentSelectedCategory !== "ALL") {
+                currentSelectedCategory = "ALL";
+                updateCategoryActiveUI("ALL");
+            }
+            filterChannels();
+        }
 
+        function syncCategory(categoryName, element) {
+            document.getElementById('search').value = "";
+            currentSelectedCategory = categoryName;
+            updateCategoryActiveUI(categoryName);
+            filterChannels(); 
+        }
+
+        function updateCategoryActiveUI(categoryName) {
             const menuItems = document.querySelectorAll('.nav-item');
             menuItems.forEach(item => item.classList.remove('active'));
             const matchedMenu = Array.from(menuItems).find(item => item.getAttribute('data-cat') === categoryName);
@@ -646,13 +657,10 @@
             catButtons.forEach(btn => btn.classList.remove('active'));
             const matchedBtn = Array.from(catButtons).find(btn => btn.getAttribute('data-cat') === categoryName);
             if(matchedBtn) matchedBtn.classList.add('active');
-
-            filterChannels(); // মোটেও প্লেয়ার বন্ধ হবে না কারণ innerHTML খালি হচ্ছে না।
         }
 
-        // আলটিমেট CSS ফিল্টারিং মেথড (একদম হাই-স্পিড ও নিরাপদ)
         function filterChannels() {
-            const searchQuery = document.getElementById('search').value.toLowerCase();
+            const searchQuery = document.getElementById('search').value.toLowerCase().trim();
             const cards = document.querySelectorAll('.channel-card');
             let visibleCount = 0;
 
@@ -669,7 +677,6 @@
                     matchesCategory = cardGroup.includes(currentSelectedCategory.toLowerCase());
                 }
 
-                // CSS display প্রপার্টি দিয়ে হাইড/শো করা হচ্ছে (DOM ডিলিট হচ্ছে না)
                 if (matchesSearch && matchesCategory) {
                     card.style.display = 'flex';
                     visibleCount++;
@@ -678,7 +685,6 @@
                 }
             });
 
-            // নো রেজাল্ট মেসেজ শো/হাইড
             const noResults = document.getElementById('no-results');
             if (visibleCount === 0) {
                 noResults.style.display = 'block';
@@ -702,7 +708,6 @@
         };
 
         function playLiveStream(url, name) {
-            // যদি একই চ্যানেল পুনরায় ক্লিক হয়, তবে রিলোড প্রজেক্ট আটকে দেওয়া হবে
             if (currentPlayingUrl === url && hlsPlayer) {
                 return; 
             }
@@ -753,7 +758,6 @@
                 });
             }
 
-            // বর্তমানে বাজতে থাকা চ্যানেলের বর্ডার এবং টেক্সট লাইভ আপডেট
             updatePlayingCardUI();
         }
 

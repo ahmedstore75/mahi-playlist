@@ -65,10 +65,10 @@
             color: #888;
         }
 
-        /* ল্যাপটপ/বড় স্ক্রিনের জন্য দুই কলাম লেআউট */
+        /* লেআউট বডি */
         .content-body {
             display: flex;
-            flex-direction: column; /* ডিফল্ট মোবাইল ভিউ (ওপর-নিচে) */
+            flex-direction: column;
             gap: 20px;
             flex-grow: 1;
         }
@@ -128,7 +128,7 @@
         }
         @keyframes blink { 50% { opacity: 0; } }
 
-        /* ডান পাশের চ্যানেল ও ক্যাটাগরি এরিয়া */
+        /* চ্যানেল ও ক্যাটাগরি এরিয়া */
         .list-container-area {
             display: flex;
             flex-direction: column;
@@ -196,7 +196,7 @@
             color: #fff;
         }
 
-        /* চ্যানেল গ্রিড (মোবাইলে ২ কলাম, ল্যাপটপে স্ক্রিনের সুবিধামত অ্যাডজাস্ট হবে) */
+        /* চ্যানেল গ্রিড */
         .channels-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -295,32 +295,30 @@
             margin-top: auto;
         }
 
-        /* ===================================================
-           LAPTOP & DESKTOP SCREEN RULES (বড় স্ক্রিনে পাশাপাশি দেখাবে)
-           =================================================== */
+        /* ল্যাপটপ এবং ডেস্কটপ রেসপনসিভ ভিউ (পাশাপাশি কলাম) */
         @media screen and (min-width: 992px) {
             .content-body {
-                flex-direction: row; /* প্লেয়ার বামে, চ্যানেল ডানে */
+                flex-direction: row;
                 align-items: flex-start;
             }
 
             .player-container {
-                width: 60%; /* ল্যাপটপে ৬০% জায়গা প্লেয়ার নেবে */
+                width: 60%;
                 position: sticky;
                 top: 15px;
             }
 
             .list-container-area {
-                width: 40%; /* ল্যাপটপে ৪০% জায়গা চ্যানেল লিস্ট নেবে */
+                width: 40%;
                 max-height: calc(100vh - 120px);
-                overflow-y: auto; /* চ্যানেল বেশি হলে ল্যাপটপে স্ক্রল হবে */
+                overflow-y: auto;
                 padding-right: 8px;
             }
             .list-container-area::-webkit-scrollbar { width: 5px; }
             .list-container-area::-webkit-scrollbar-thumb { background: #ff0022; border-radius: 3px; }
 
             .channels-grid {
-                grid-template-columns: repeat(1, 1fr); /* ল্যাপটপে ১টি করে সুন্দর সোজা লিস্ট হবে */
+                grid-template-columns: repeat(1, 1fr);
             }
         }
 

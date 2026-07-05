@@ -19,7 +19,7 @@
         body {
             background-color: #0b0e14;
             color: #ffffff;
-            overflow-x: hidden;
+            overflow: hidden; /* পুরো বডির মেইন স্ক্রল বন্ধ করা হয়েছে */
         }
 
         /* কন্টেইনার সজ্জা */
@@ -30,10 +30,10 @@
             padding: 15px;
             display: flex;
             flex-direction: column;
-            min-height: 100vh;
+            height: 100vh; /* পুরো স্ক্রিন জুড়ে থাকবে */
         }
 
-        /* টপ হেডার (লোগো বামে, ঘড়ি ডানে) */
+        /* টপ হেডার */
         .top-header {
             display: flex;
             justify-content: space-between;
@@ -41,6 +41,7 @@
             margin-bottom: 15px;
             padding-bottom: 10px;
             border-bottom: 1px solid #161a22;
+            flex-shrink: 0;
         }
 
         .logo-section h1 {
@@ -69,11 +70,12 @@
         .content-body {
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 15px;
             flex-grow: 1;
+            overflow: hidden; /* ভেতরের কন্টেন্ট বাইরে যাবে না */
         }
 
-        /* ভিডিও প্লেয়ার কন্টেইনার */
+        /* ভিডিও প্লেয়ার কন্টেইনার (এটি সবসময় ফিক্সড থাকবে) */
         .player-container {
             width: 100%;
             flex-shrink: 0;
@@ -133,31 +135,33 @@
             display: flex;
             flex-direction: column;
             flex-grow: 1;
+            overflow: hidden; /* বাইরের স্ক্রল বন্ধ */
         }
 
-        /* ক্যাটাগরি সেকশন */
+        /* ক্যাটাগরি সেকশন (এটিও ফিক্সড থাকবে স্ক্রল হবে না) */
         .category-section {
             background-color: #0b0e14;
-            padding-bottom: 15px;
+            padding-bottom: 10px;
+            flex-shrink: 0;
         }
 
         .cat-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             gap: 15px;
         }
 
         .search-box {
             position: relative;
-            width: 200px;
+            width: 180px;
         }
         .search-box input {
             width: 100%;
             background-color: #161a22;
             border: 1px solid #2a2f3b;
-            padding: 8px 35px 8px 12px;
+            padding: 6px 30px 6px 10px;
             border-radius: 6px;
             color: #fff;
             outline: none;
@@ -165,17 +169,18 @@
         }
         .search-box i {
             position: absolute;
-            right: 12px;
+            right: 10px;
             top: 50%;
             transform: translateY(-50%);
             color: #888;
+            font-size: 12px;
         }
 
         .category-tags {
             display: flex;
             gap: 8px;
             overflow-x: auto;
-            padding-bottom: 8px;
+            padding-bottom: 5px;
         }
         .category-tags::-webkit-scrollbar { height: 4px; }
         .category-tags::-webkit-scrollbar-thumb { background: #2a2f3b; border-radius: 2px; }
@@ -184,7 +189,7 @@
             background-color: #161a22;
             color: #b3b3b3;
             border: none;
-            padding: 8px 14px;
+            padding: 6px 12px;
             border-radius: 4px;
             font-size: 12px;
             font-weight: bold;
@@ -196,12 +201,20 @@
             color: #fff;
         }
 
-        /* চ্যানেল গ্রিড */
+        /* স্ক্রলেবল চ্যানেল গ্রিড কন্টেইনার (শুধুমাত্র এই অংশটি স্ক্রল হবে) */
+        .channels-scroll-view {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+        .channels-scroll-view::-webkit-scrollbar { width: 5px; }
+        .channels-scroll-view::-webkit-scrollbar-thumb { background: #ff0022; border-radius: 3px; }
+
         .channels-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin-bottom: 20px;
+            gap: 10px;
+            padding-bottom: 15px;
         }
 
         .channel-card {
@@ -289,33 +302,28 @@
             display: flex;
             justify-content: space-between;
             border-top: 1px solid #161a22;
-            padding-top: 15px;
+            padding-top: 10px;
             color: #666;
-            font-size: 12px;
-            margin-top: auto;
+            font-size: 11px;
+            flex-shrink: 0;
         }
 
-        /* ল্যাপটপ এবং ডেস্কটপ রেসপনসিভ ভিউ (পাশাপাশি কলাম) */
+        /* ===================================================
+           LAPTOP & DESKTOP SCREEN RULES (বড় স্ক্রিনে পাশাপাশি ফিক্সড লেআউট)
+           =================================================== */
         @media screen and (min-width: 992px) {
             .content-body {
                 flex-direction: row;
-                align-items: flex-start;
+                align-items: stretch;
             }
 
             .player-container {
                 width: 60%;
-                position: sticky;
-                top: 15px;
             }
 
             .list-container-area {
                 width: 40%;
-                max-height: calc(100vh - 120px);
-                overflow-y: auto;
-                padding-right: 8px;
             }
-            .list-container-area::-webkit-scrollbar { width: 5px; }
-            .list-container-area::-webkit-scrollbar-thumb { background: #ff0022; border-radius: 3px; }
 
             .channels-grid {
                 grid-template-columns: repeat(1, 1fr);
@@ -390,10 +398,12 @@
                     </div>
                 </section>
 
-                <section class="channels-grid" id="channels-container">
-                    <div class="loading-text"><i class="fa-solid fa-spinner fa-spin"></i> Loading channels...</div>
-                </section>
-                <div id="no-results" class="no-results-msg">No channels found.</div>
+                <div class="channels-scroll-view">
+                    <section class="channels-grid" id="channels-container">
+                        <div class="loading-text"><i class="fa-solid fa-spinner fa-spin"></i> Loading channels...</div>
+                    </section>
+                    <div id="no-results" class="no-results-msg">No channels found.</div>
+                </div>
                 
             </div>
 

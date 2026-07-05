@@ -75,7 +75,7 @@
             overflow: hidden; 
         }
 
-        /*  ভিডিও প্লেয়ার কন্টেইনার */
+        /* ভিডিও প্লেয়ার কন্টেইনার */
         .player-container {
             width: 100%;
             flex-shrink: 0;
@@ -149,31 +149,44 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             gap: 15px;
         }
 
+        /* গর্জিয়াস সার্চ বক্স ডিজাইন */
         .search-box {
             position: relative;
-            width: 180px;
+            width: 200px;
         }
         .search-box input {
             width: 100%;
-            background-color: #161a22;
-            border: 1px solid #2a2f3b;
-            padding: 6px 30px 6px 10px;
-            border-radius: 6px;
+            background: linear-gradient(145deg, #161a22, #1a202c);
+            border: 1px solid #3a4454;
+            padding: 8px 35px 8px 12px;
+            border-radius: 8px;
             color: #fff;
             outline: none;
             font-size: 13px;
+            transition: all 0.3s ease;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+        }
+        .search-box input:focus {
+            border-color: #ff0022;
+            box-shadow: 0 0 10px rgba(255, 0, 34, 0.4), inset 0 1px 2px rgba(0,0,0,0.2);
+            background: #1c212d;
         }
         .search-box i {
             position: absolute;
-            right: 10px;
+            right: 12px;
             top: 50%;
             transform: translateY(-50%);
-            color: #888;
-            font-size: 12px;
+            color: #ff0022;
+            font-size: 13px;
+            transition: all 0.3s ease;
+        }
+        .search-box input:focus + i {
+            color: #fff;
+            text-shadow: 0 0 5px #ff0022;
         }
 
         .category-tags {
@@ -298,14 +311,17 @@
             display: none;
         }
 
+        /* ফুটার */
         .app-footer {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
+            align-items: center;
             border-top: 1px solid #161a22;
             padding-top: 10px;
             color: #666;
             font-size: 11px;
             flex-shrink: 0;
+            text-align: center;
         }
 
         /* ===================================================
@@ -389,7 +405,7 @@
                     <div class="cat-header">
                         <h3>Categories</h3>
                         <div class="search-box">
-                            <input type="text" id="search" placeholder="Search..." oninput="handleSearchInput()">
+                            <input type="text" id="search" placeholder="Search channels..." oninput="handleSearchInput()">
                             <i class="fa-solid fa-magnifying-glass"></i>
                         </div>
                     </div>
@@ -411,13 +427,13 @@
 
         <footer class="app-footer">
             <p>© 2026 SA IPTV BD LIVE</p>
-            <p>Built with <span style="color: red;">&hearts;</span></p>
         </footer>
         
     </div>
 
     <script>
         let currentSelectedCategory = "ALL"; 
+        let lastUserSelectedCategory = "ALL"; // ইউজারের শেষ সিলেক্ট করা ক্যাটাগরি মনে রাখার জন্য
         let badgeTimeout = null;
         let currentPlayingUrl = ""; 
         let allChannels = [];
@@ -527,7 +543,6 @@
 
                 const logoHtml = channel.logo ? `<img src="${channel.logo}" alt="" class="channel-thumb">` : `<div class="channel-thumb"><i class="fa-solid fa-tv"></i></div>`;
                 
-                // এখানে সিরিয়াল নাম্বার বাদ দিয়ে শুধু চ্যানেলের নাম রাখা হয়েছে
                 card.innerHTML = `
                     ${logoHtml}
                     <div class="channel-info">
@@ -542,13 +557,26 @@
             filterChannels();
         }
 
+        // স্মার্ট গ্লোবাল সার্চ হ্যান্ডলার
         function handleSearchInput() {
+            const searchQuery = document.getElementById('search').value.trim();
+            
+            if (searchQuery.length > 0) {
+                // সার্চ বক্সে কিছু লিখলে ক্যাটাগরি ফিল্টার সাময়িকভাবে 'ALL' হয়ে যাবে
+                currentSelectedCategory = "ALL";
+                updateCategoryActiveUI("ALL");
+            } else {
+                // সার্চ বক্স একদম খালি করে দিলে আগের ক্যাটাগরিতে ফিরে যাবে
+                currentSelectedCategory = lastUserSelectedCategory;
+                updateCategoryActiveUI(lastUserSelectedCategory);
+            }
             filterChannels();
         }
 
         function syncCategory(categoryName, element) {
-            document.getElementById('search').value = "";
+            document.getElementById('search').value = ""; // ক্যাটাগরি ক্লিক করলে সার্চ রিসেট হবে
             currentSelectedCategory = categoryName;
+            lastUserSelectedCategory = categoryName; // ইউজারের চয়েস সেভ করে রাখা হলো
             updateCategoryActiveUI(categoryName);
             filterChannels(); 
         }

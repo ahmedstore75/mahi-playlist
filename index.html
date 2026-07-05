@@ -212,13 +212,11 @@
         .scrollable-content-area::-webkit-scrollbar { width: 6px; }
         .scrollable-content-area::-webkit-scrollbar-thumb { background: #ff0022; border-radius: 3px; }
 
-        /* ===================================================
-           ক্যাটাগরি এবং সার্চ বক্স স্টিকি (Sticky) করার রুলস
-           =================================================== */
+        /* ক্যাটাগরি সেকশন (Sticky) */
         .category-section {
             position: sticky;
             top: 0;
-            background-color: #0b0e14; /* স্ক্রল করার সময় পেছনের কন্টেন্ট যেন দেখা না যায় */
+            background-color: #0b0e14;
             z-index: 50;
             padding-top: 5px;
             padding-bottom: 10px;
@@ -284,7 +282,7 @@
             color: #fff;
         }
 
-        /* ২-কলাম বিশিষ্ট চ্যানেল গ্রিড */
+        /* চ্যানেল গ্রিড */
         .channels-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -393,9 +391,7 @@
             margin-top: 10px;
         }
 
-        /* ===================================================
-           MOBILE SCREEN RE-FIT
-           =================================================== */
+        /* MOBILE SCREEN RE-FIT */
         @media screen and (max-width: 768px) {
             .sidebar {
                 width: 75px; 
@@ -452,19 +448,9 @@
                 <h1>SA IPTV <br><span>BD LIVE</span></h1>
             </div>
             
+            <!-- সাইডবার মেনু এখন ডাইনামিকালি লোড হবে -->
             <nav class="nav-menu" id="sidebar-menu">
-                <a onclick="syncCategory('ALL', this)" class="nav-item active" data-cat="ALL"><i class="fa-solid fa-border-all"></i> ALL CHANNELS</a>
-                <a onclick="syncCategory('Bangla', this)" class="nav-item" data-cat="Bangla"><i class="fa-solid fa-tv"></i> BANGLA</a>
-                <a onclick="syncCategory('News', this)" class="nav-item" data-cat="News"><i class="fa-solid fa-newspaper"></i> NEWS</a>
-                <a onclick="syncCategory('Sports', this)" class="nav-item" data-cat="Sports"><i class="fa-solid fa-trophy"></i> SPORTS</a>
-                <a onclick="syncCategory('Movies', this)" class="nav-item" data-cat="Movies"><i class="fa-solid fa-film"></i> MOVIES</a>
-                <a onclick="syncCategory('Series', this)" class="nav-item" data-cat="Series"><i class="fa-solid fa-clapperboard"></i> SERIES</a>
-                <a onclick="syncCategory('Music', this)" class="nav-item" data-cat="Music"><i class="fa-solid fa-music"></i> MUSIC</a>
-                <a onclick="syncCategory('Kids', this)" class="nav-item" data-cat="Kids"><i class="fa-solid fa-child"></i> KIDS</a>
-                <a onclick="syncCategory('Islamic', this)" class="nav-item" data-cat="Islamic"><i class="fa-solid fa-mosque"></i> ISLAMIC</a>
-                <a onclick="syncCategory('International', this)" class="nav-item" data-cat="International"><i class="fa-solid fa-globe"></i> GLOBAL</a>
-                <a onclick="syncCategory('Education', this)" class="nav-item" data-cat="Education"><i class="fa-solid fa-graduation-cap"></i> EDUCATION</a>
-                <a onclick="syncCategory('VOD', this)" class="nav-item" data-cat="VOD"><i class="fa-solid fa-video"></i> VOD</a>
+                <div class="loading-text" style="font-size: 11px;">Loading Menu...</div>
             </nav>
 
             <div class="social-links">
@@ -494,7 +480,6 @@
 
             <div class="scrollable-content-area">
                 
-                <!-- ক্যাটাগরি সেকশন যা স্টিকি করা হয়েছে -->
                 <section class="category-section">
                     <div class="cat-header">
                         <h3>Categories</h3>
@@ -504,19 +489,9 @@
                         </div>
                     </div>
                     
+                    <!-- ওপরে স্ক্রল করার বাটনগুলো ডাইনামিকালি তৈরি হবে -->
                     <div class="category-tags" id="category-buttons-container">
-                        <button class="cat-btn active" data-cat="ALL" onclick="syncCategory('ALL', this)">ALL</button>
-                        <button class="cat-btn" data-cat="Bangla" onclick="syncCategory('Bangla', this)">🇧🇩 Bangla</button>
-                        <button class="cat-btn" data-cat="News" onclick="syncCategory('News', this)">📰 News</button>
-                        <button class="cat-btn" data-cat="Sports" onclick="syncCategory('Sports', this)">⚽ Sports</button>
-                        <button class="cat-btn" data-cat="Movies" onclick="syncCategory('Movies', this)">🎬 Movies</button>
-                        <button class="cat-btn" data-cat="Series" onclick="syncCategory('Series', this)">🎞 Series</button>
-                        <button class="cat-btn" data-cat="Music" onclick="syncCategory('Music', this)">🎵 Music</button>
-                        <button class="cat-btn" data-cat="Kids" onclick="syncCategory('Kids', this)">👶 Kids</button>
-                        <button class="cat-btn" data-cat="Islamic" onclick="syncCategory('Islamic', this)">🕌 Islamic</button>
-                        <button class="cat-btn" data-cat="International" onclick="syncCategory('International', this)">🌍 International</button>
-                        <button class="cat-btn" data-cat="Education" onclick="syncCategory('Education', this)">🎓 Education</button>
-                        <button class="cat-btn" data-cat="VOD" onclick="syncCategory('VOD', this)">🎥 VOD</button>
+                        <div class="loading-text" style="font-size: 11px; padding:0;">Loading Categories...</div>
                     </div>
                 </section>
 
@@ -540,6 +515,7 @@
         let badgeTimeout = null;
         let currentPlayingUrl = ""; 
         let allChannels = [];
+        let uniqueCategories = new Set(); // M3U থেকে ইউনিক ক্যাটাগরি রাখার জন্য
 
         function updateClock() {
             const now = new Date();
@@ -571,7 +547,7 @@
             const lines = text.split('\n');
             let currentName = "";
             let currentLogo = "";
-            let currentGroup = "ALL"; 
+            let currentGroup = "Uncategorized"; 
 
             for (let i = 0; i < lines.length; i++) {
                 const line = lines[i].trim();
@@ -581,7 +557,7 @@
                     currentLogo = logoMatch ? logoMatch[1] : "";
 
                     const groupMatch = line.match(/group-title="([^"]+)"/);
-                    currentGroup = groupMatch ? groupMatch[1].trim() : "ALL";
+                    currentGroup = groupMatch ? groupMatch[1].trim() : "Uncategorized";
 
                     const nameIndex = line.lastIndexOf(',');
                     if (nameIndex !== -1) {
@@ -595,18 +571,54 @@
                             logo: currentLogo,
                             group: currentGroup
                         });
+                        
+                        // ক্যাটাগরির নাম সেট-এ যুক্ত করা হচ্ছে
+                        if(currentGroup && currentGroup.toLowerCase() !== "all") {
+                            uniqueCategories.add(currentGroup);
+                        }
+
                         currentName = ""; 
                         currentLogo = "";
-                        currentGroup = "ALL";
+                        currentGroup = "Uncategorized";
                     }
                 }
             }
             
+            buildDynamicCategoryUI(); // প্রথমে ক্যাটাগরি মেনু তৈরি হবে
             buildInitialDOMChannels(); 
 
             if (allChannels.length > 0 && currentPlayingUrl === "") {
                 playLiveStream(allChannels[0].url, allChannels[0].name);
             }
+        }
+
+        // M3U থেকে পাওয়া গ্রুপ অনুযায়ী বাটন এবং সাইডবার মেনু জেনারেট করা
+        function buildDynamicCategoryUI() {
+            const sidebarMenu = document.getElementById('sidebar-menu');
+            const tagsContainer = document.getElementById('category-buttons-container');
+
+            // রিসেট করা
+            sidebarMenu.innerHTML = `<a onclick="syncCategory('ALL', this)" class="nav-item active" data-cat="ALL"><i class="fa-solid fa-border-all"></i> ALL CHANNELS</a>`;
+            tagsContainer.innerHTML = `<button class="cat-btn active" data-cat="ALL" onclick="syncCategory('ALL', this)">ALL</button>`;
+
+            // ইউনিক ক্যাটাগরি লুপ চালিয়ে বাটন তৈরি
+            uniqueCategories.forEach(cat => {
+                // সাইডবার মেনুর জন্য
+                const navItem = document.createElement('a');
+                navItem.className = 'nav-item';
+                navItem.setAttribute('data-cat', cat);
+                navItem.onclick = function() { syncCategory(cat, this); };
+                navItem.innerHTML = `<i class="fa-solid fa-tv"></i> ${cat.toUpperCase()}`;
+                sidebarMenu.appendChild(navItem);
+
+                // টপ স্টিকি বারের বাটন এর জন্য
+                const catBtn = document.createElement('button');
+                catBtn.className = 'cat-btn';
+                catBtn.setAttribute('data-cat', cat);
+                catBtn.onclick = function() { syncCategory(cat, this); };
+                catBtn.innerText = cat;
+                tagsContainer.appendChild(catBtn);
+            });
         }
 
         function buildInitialDOMChannels() {
@@ -654,12 +666,12 @@
         function updateCategoryActiveUI(categoryName) {
             const menuItems = document.querySelectorAll('.nav-item');
             menuItems.forEach(item => item.classList.remove('active'));
-            const matchedMenu = Array.from(menuItems).find(item => item.getAttribute('data-cat') === categoryName);
+            const matchedMenu = Array.from(menuItems).find(item => item.getAttribute('data-cat').toLowerCase() === categoryName.toLowerCase());
             if(matchedMenu) matchedMenu.classList.add('active');
 
             const catButtons = document.querySelectorAll('.cat-btn');
             catButtons.forEach(btn => btn.classList.remove('active'));
-            const matchedBtn = Array.from(catButtons).find(btn => btn.getAttribute('data-cat') === categoryName);
+            const matchedBtn = Array.from(catButtons).find(btn => btn.getAttribute('data-cat').toLowerCase() === categoryName.toLowerCase());
             if(matchedBtn) matchedBtn.classList.add('active');
         }
 
@@ -678,8 +690,7 @@
                 if (currentSelectedCategory === "ALL") {
                     matchesCategory = true;
                 } else {
-                    // M3U প্লেলিস্টের group-title এর সাথে ক্যাটাগরি ম্যাচ করানো হচ্ছে
-                    matchesCategory = cardGroup.includes(currentSelectedCategory.toLowerCase());
+                    matchesCategory = (cardGroup === currentSelectedCategory.toLowerCase());
                 }
 
                 if (matchesSearch && matchesCategory) {

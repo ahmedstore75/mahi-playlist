@@ -28,7 +28,7 @@
             height: 100vh; 
         }
 
-        /* ফিক্সড বাম পাশের সাইডবার */
+        /* বাম পাশের সাইডবার (শুধু লোগো ও সোশ্যাল লিংকের জন্য) */
         .sidebar {
             width: 240px;
             background-color: #000000;
@@ -53,42 +53,6 @@
         .logo-section h1 span {
             color: #ff0022;
             display: inline-block;
-        }
-
-        .nav-menu {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            flex-grow: 1;
-            overflow-y: auto;
-        }
-
-        .nav-menu::-webkit-scrollbar { width: 4px; }
-        .nav-menu::-webkit-scrollbar-thumb { background: #2a2f3b; border-radius: 2px; }
-
-        .nav-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            color: #b3b3b3;
-            text-decoration: none;
-            padding: 10px 12px;
-            border-radius: 6px;
-            font-size: 13px;
-            font-weight: 600;
-            transition: 0.3s;
-            white-space: nowrap;
-            cursor: pointer;
-        }
-
-        .nav-item i {
-            font-size: 15px;
-            width: 20px;
-        }
-
-        .nav-item:hover, .nav-item.active {
-            background-color: #ff0022;
-            color: #ffffff;
         }
 
         .social-links {
@@ -391,7 +355,7 @@
             margin-top: 10px;
         }
 
-        /* MOBILE SCREEN RE-FIT */
+        /* MOBILE NORMAL SCREEN RE-FIT */
         @media screen and (max-width: 768px) {
             .sidebar {
                 width: 75px; 
@@ -405,17 +369,6 @@
                 margin-bottom: 15px;
             }
             .logo-section h1 span { display: block; }
-
-            .nav-menu { gap: 2px; }
-
-            .nav-item {
-                flex-direction: column;
-                gap: 3px;
-                padding: 8px 2px;
-                font-size: 8px;
-                text-align: center;
-            }
-            .nav-item i { width: auto; font-size: 14px; }
 
             .social-links { gap: 8px; padding-top: 10px; }
             .social-links a { font-size: 13px; }
@@ -437,21 +390,57 @@
             .channel-thumb { width: 42px; height: 32px; font-size: 12px; }
             .channel-info h4 { font-size: 11px; }
         }
+
+        /* ===================================================
+           মোবাইল স্ক্রিন রোটেট (LANDSCAPE) করলে ভিডিও ফুলস্ক্রিন করার রুলস
+           =================================================== */
+        @media screen and (max-width: 932px) and (orientation: landscape) {
+            body, .app-container, .main-content {
+                margin: 0 !important;
+                padding: 0 !important;
+                width: 100vw !important;
+                height: 100vh !important;
+                overflow: hidden !important;
+            }
+
+            /* সাইডবার এবং অন্যান্য কন্টেন্ট হাইড হবে */
+            .sidebar, .top-header, .scrollable-content-area, .category-section {
+                display: none !important;
+            }
+
+            /* প্লেয়ারকে পুরো স্ক্রিনে ফিট করা */
+            .player-container {
+                margin: 0 !important;
+                width: 100vw !important;
+                height: 100vh !important;
+            }
+
+            .video-wrapper {
+                width: 100vw !important;
+                height: 100vh !important;
+                border: none !important;
+                border-radius: 0 !important;
+                box-shadow: none !important;
+                aspect-ratio: auto !important;
+            }
+
+            video {
+                width: 100% !important;
+                height: 100% !important;
+                object-fit: fill !important; /* স্ক্রিন অনুযায়ী পুরোপুরি স্ট্রেচ বা ফিট হবে */
+            }
+        }
     </style>
 </head>
 <body>
 
     <div class="app-container">
         
+        <!-- সাইডবার (বাম দিকের মেনু অপশন বাদ দেওয়া হয়েছে) -->
         <aside class="sidebar">
             <div class="logo-section">
                 <h1>SA IPTV <br><span>BD LIVE</span></h1>
             </div>
-            
-            <!-- সাইডবার মেনু এখন ডাইনামিকালি লোড হবে -->
-            <nav class="nav-menu" id="sidebar-menu">
-                <div class="loading-text" style="font-size: 11px;">Loading Menu...</div>
-            </nav>
 
             <div class="social-links">
                 <a href="https://www.facebook.com/ahmed.bd.fb" target="_blank"><i class="fa-brands fa-facebook"></i></a>
@@ -515,7 +504,7 @@
         let badgeTimeout = null;
         let currentPlayingUrl = ""; 
         let allChannels = [];
-        let uniqueCategories = new Set(); // M3U থেকে ইউনিক ক্যাটাগরি রাখার জন্য
+        let uniqueCategories = new Set(); 
 
         function updateClock() {
             const now = new Date();
@@ -572,7 +561,6 @@
                             group: currentGroup
                         });
                         
-                        // ক্যাটাগরির নাম সেট-এ যুক্ত করা হচ্ছে
                         if(currentGroup && currentGroup.toLowerCase() !== "all") {
                             uniqueCategories.add(currentGroup);
                         }
@@ -584,7 +572,7 @@
                 }
             }
             
-            buildDynamicCategoryUI(); // প্রথমে ক্যাটাগরি মেনু তৈরি হবে
+            buildDynamicCategoryUI(); 
             buildInitialDOMChannels(); 
 
             if (allChannels.length > 0 && currentPlayingUrl === "") {
@@ -592,26 +580,12 @@
             }
         }
 
-        // M3U থেকে পাওয়া গ্রুপ অনুযায়ী বাটন এবং সাইডবার মেনু জেনারেট করা
+        // শুধু ওপরের টপ বারের জন্য ক্যাটাগরি বাটন জেনারেট করা হচ্ছে
         function buildDynamicCategoryUI() {
-            const sidebarMenu = document.getElementById('sidebar-menu');
             const tagsContainer = document.getElementById('category-buttons-container');
-
-            // রিসেট করা
-            sidebarMenu.innerHTML = `<a onclick="syncCategory('ALL', this)" class="nav-item active" data-cat="ALL"><i class="fa-solid fa-border-all"></i> ALL CHANNELS</a>`;
             tagsContainer.innerHTML = `<button class="cat-btn active" data-cat="ALL" onclick="syncCategory('ALL', this)">ALL</button>`;
 
-            // ইউনিক ক্যাটাগরি লুপ চালিয়ে বাটন তৈরি
             uniqueCategories.forEach(cat => {
-                // সাইডবার মেনুর জন্য
-                const navItem = document.createElement('a');
-                navItem.className = 'nav-item';
-                navItem.setAttribute('data-cat', cat);
-                navItem.onclick = function() { syncCategory(cat, this); };
-                navItem.innerHTML = `<i class="fa-solid fa-tv"></i> ${cat.toUpperCase()}`;
-                sidebarMenu.appendChild(navItem);
-
-                // টপ স্টিকি বারের বাটন এর জন্য
                 const catBtn = document.createElement('button');
                 catBtn.className = 'cat-btn';
                 catBtn.setAttribute('data-cat', cat);
@@ -664,11 +638,6 @@
         }
 
         function updateCategoryActiveUI(categoryName) {
-            const menuItems = document.querySelectorAll('.nav-item');
-            menuItems.forEach(item => item.classList.remove('active'));
-            const matchedMenu = Array.from(menuItems).find(item => item.getAttribute('data-cat').toLowerCase() === categoryName.toLowerCase());
-            if(matchedMenu) matchedMenu.classList.add('active');
-
             const catButtons = document.querySelectorAll('.cat-btn');
             catButtons.forEach(btn => btn.classList.remove('active'));
             const matchedBtn = Array.from(catButtons).find(btn => btn.getAttribute('data-cat').toLowerCase() === categoryName.toLowerCase());

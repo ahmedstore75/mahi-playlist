@@ -75,7 +75,7 @@
             overflow: hidden; 
         }
 
-        /* ভিডিও প্লেয়ার কন্টেইনার */
+        /*  ভিডিও প্লেয়ার কন্টেইনার */
         .player-container {
             width: 100%;
             flex-shrink: 0;
@@ -516,7 +516,6 @@
             container.innerHTML = "";
 
             allChannels.forEach((channel, index) => {
-                const serialNum = String(index + 1).padStart(2, '0');
                 const card = document.createElement('div');
                 
                 card.className = 'channel-card';
@@ -528,10 +527,11 @@
 
                 const logoHtml = channel.logo ? `<img src="${channel.logo}" alt="" class="channel-thumb">` : `<div class="channel-thumb"><i class="fa-solid fa-tv"></i></div>`;
                 
+                // এখানে সিরিয়াল নাম্বার বাদ দিয়ে শুধু চ্যানেলের নাম রাখা হয়েছে
                 card.innerHTML = `
                     ${logoHtml}
                     <div class="channel-info">
-                        <h4>${serialNum} | ${channel.name}</h4>
+                        <h4>${channel.name}</h4>
                         <p class="cat-name">${channel.group}</p>
                     </div>
                     <div class="status-box"><i class="fa-solid fa-play play-icon"></i></div>
@@ -630,7 +630,6 @@
                     video.play().catch(() => {});
                 });
 
-                // ফিক্সড রিকভারি হ্যান্ডলার
                 hlsPlayer.on(Hls.Events.ERROR, function (event, data) {
                     if (data.fatal) {
                         switch (data.type) {

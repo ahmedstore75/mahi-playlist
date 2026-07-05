@@ -19,37 +19,32 @@
         body {
             background-color: #0b0e14;
             color: #ffffff;
-            overflow: hidden; 
+            overflow-x: hidden;
         }
 
-        .app-container {
-            display: flex;
-            width: 100vw;
-            height: 100vh; 
-        }
-
-        /* ডান পাশের মেইন কন্টেন্ট এরিয়া (এখন এটিই পুরো স্ক্রিন জুড়ে থাকবে) */
+        /* কন্টেইনার সজ্জা */
         .main-content {
-            flex-grow: 1;
-            padding: 20px 30px;
             width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 15px;
             display: flex;
             flex-direction: column;
-            height: 100vh;
+            min-height: 100vh;
         }
 
-        /* টপ হেডার সজ্জা */
+        /* টপ হেডার (লোগো বামে, ঘড়ি ডানে) */
         .top-header {
             display: flex;
-            justify-content: space-between; /* লোগো বামে এবং ঘড়ি ডানে রাখবে */
+            justify-content: space-between;
             align-items: center;
             margin-bottom: 15px;
-            flex-shrink: 0;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #161a22;
         }
 
-        /* লোগো টেক্সট স্টাইল */
         .logo-section h1 {
-            font-size: 18px;
+            font-size: 20px;
             color: #ffffff;
             font-weight: 700;
             letter-spacing: 0.5px;
@@ -60,20 +55,27 @@
 
         .time-widget {
             text-align: right;
-            font-size: 16px;
+            font-size: 15px;
             color: #ffffff;
             font-weight: bold;
             line-height: 1.2;
         }
-
         .time-widget span {
             font-size: 12px;
             color: #888;
         }
 
-        /* ভিডিও প্লেয়ার */
+        /* ল্যাপটপ/বড় স্ক্রিনের জন্য দুই কলাম লেআউট */
+        .content-body {
+            display: flex;
+            flex-direction: column; /* ডিফল্ট মোবাইল ভিউ (ওপর-নিচে) */
+            gap: 20px;
+            flex-grow: 1;
+        }
+
+        /* ভিডিও প্লেয়ার কন্টেইনার */
         .player-container {
-            margin-bottom: 20px;
+            width: 100%;
             flex-shrink: 0;
         }
 
@@ -115,10 +117,6 @@
             align-items: center;
             gap: 8px;
             border: 1px solid #ff0022;
-            max-width: 100%;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
         }
 
         .live-dot {
@@ -127,45 +125,34 @@
             background-color: #ff0022;
             border-radius: 50%;
             animation: blink 1s infinite;
-            flex-shrink: 0;
         }
-
         @keyframes blink { 50% { opacity: 0; } }
 
-        /* স্ক্রলেবল কন্টেন্ট এরিয়া */
-        .scrollable-content-area {
+        /* ডান পাশের চ্যানেল ও ক্যাটাগরি এরিয়া */
+        .list-container-area {
+            display: flex;
+            flex-direction: column;
             flex-grow: 1;
-            overflow-y: auto;
-            padding-right: 5px;
         }
 
-        .scrollable-content-area::-webkit-scrollbar { width: 6px; }
-        .scrollable-content-area::-webkit-scrollbar-thumb { background: #ff0022; border-radius: 3px; }
-
-        /* ক্যাটাগরি সেকশন (Sticky) */
+        /* ক্যাটাগরি সেকশন */
         .category-section {
-            position: sticky;
-            top: 0;
             background-color: #0b0e14;
-            z-index: 50;
-            padding-top: 5px;
-            padding-bottom: 10px;
+            padding-bottom: 15px;
         }
 
         .cat-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             gap: 15px;
         }
 
         .search-box {
             position: relative;
-            width: 250px;
-            flex-shrink: 0;
+            width: 200px;
         }
-
         .search-box input {
             width: 100%;
             background-color: #161a22;
@@ -174,8 +161,8 @@
             border-radius: 6px;
             color: #fff;
             outline: none;
+            font-size: 13px;
         }
-
         .search-box i {
             position: absolute;
             right: 12px;
@@ -186,12 +173,10 @@
 
         .category-tags {
             display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
+            gap: 8px;
             overflow-x: auto;
-            padding-bottom: 5px;
+            padding-bottom: 8px;
         }
-
         .category-tags::-webkit-scrollbar { height: 4px; }
         .category-tags::-webkit-scrollbar-thumb { background: #2a2f3b; border-radius: 2px; }
 
@@ -199,24 +184,23 @@
             background-color: #161a22;
             color: #b3b3b3;
             border: none;
-            padding: 8px 16px;
+            padding: 8px 14px;
             border-radius: 4px;
             font-size: 12px;
             font-weight: bold;
             cursor: pointer;
             white-space: nowrap;
         }
-
         .cat-btn.active, .cat-btn:hover {
             background-color: #ff0022;
             color: #fff;
         }
 
-        /* চ্যানেল গ্রিড */
+        /* চ্যানেল গ্রিড (মোবাইলে ২ কলাম, ল্যাপটপে স্ক্রিনের সুবিধামত অ্যাডজাস্ট হবে) */
         .channels-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
+            gap: 12px;
             margin-bottom: 20px;
         }
 
@@ -224,29 +208,26 @@
             background-color: #161a22;
             border: 1px solid #2a2f3b;
             border-radius: 8px;
-            padding: 12px;
+            padding: 10px;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             cursor: pointer;
-            transition: transform 0.2s, background-color 0.2s;
+            transition: 0.2s;
             overflow: hidden;
-            position: relative;
         }
-
         .channel-card:hover {
             background-color: #1e2330;
             border-color: #ff0022;
         }
-
         .channel-card.currently-playing {
             border-color: #ff0022;
             background-color: #1e1115;
         }
 
         .channel-thumb {
-            width: 50px;
-            height: 38px;
+            width: 45px;
+            height: 35px;
             object-fit: contain;
             background-color: #0b0e14;
             border-radius: 4px;
@@ -262,29 +243,24 @@
             flex-grow: 1;
             overflow: hidden;
         }
-
         .channel-info h4 {
             font-size: 13px;
             font-weight: 600;
             color: #fff;
-            margin-bottom: 2px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
-
         .cat-name {
             font-size: 11px;
-            font-weight: 500;
             color: #ff4444;
+            margin-top: 2px;
         }
 
         .play-icon {
             color: #ff0022;
-            font-size: 14px;
-            flex-shrink: 0;
+            font-size: 12px;
         }
-
         .playing-badge-text {
             font-size: 9px;
             background: #ff0022;
@@ -292,7 +268,6 @@
             padding: 2px 5px;
             border-radius: 3px;
             font-weight: bold;
-            text-transform: uppercase;
         }
 
         .loading-text {
@@ -301,11 +276,10 @@
             padding: 20px;
             color: #888;
         }
-
         .no-results-msg {
             grid-column: span 2;
             text-align: center;
-            padding: 30px;
+            padding: 25px;
             color: #666;
             font-size: 14px;
             display: none;
@@ -318,60 +292,58 @@
             padding-top: 15px;
             color: #666;
             font-size: 12px;
-            margin-top: 10px;
+            margin-top: auto;
         }
 
-        /* MOBILE NORMAL SCREEN RE-FIT */
-        @media screen and (max-width: 768px) {
-            .main-content {
-                padding: 12px;
+        /* ===================================================
+           LAPTOP & DESKTOP SCREEN RULES (বড় স্ক্রিনে পাশাপাশি দেখাবে)
+           =================================================== */
+        @media screen and (min-width: 992px) {
+            .content-body {
+                flex-direction: row; /* প্লেয়ার বামে, চ্যানেল ডানে */
+                align-items: flex-start;
             }
 
-            .logo-section h1 {
-                font-size: 14px;
+            .player-container {
+                width: 60%; /* ল্যাপটপে ৬০% জায়গা প্লেয়ার নেবে */
+                position: sticky;
+                top: 15px;
             }
 
-            .time-widget { font-size: 13px; }
-            .time-widget span { font-size: 10px; }
+            .list-container-area {
+                width: 40%; /* ল্যাপটপে ৪০% জায়গা চ্যানেল লিস্ট নেবে */
+                max-height: calc(100vh - 120px);
+                overflow-y: auto; /* চ্যানেল বেশি হলে ল্যাপটপে স্ক্রল হবে */
+                padding-right: 8px;
+            }
+            .list-container-area::-webkit-scrollbar { width: 5px; }
+            .list-container-area::-webkit-scrollbar-thumb { background: #ff0022; border-radius: 3px; }
 
-            .cat-header h3 { font-size: 15px; }
-            .search-box { width: 140px; } 
-
-            .channels-grid { gap: 8px; }
-            .channel-card { padding: 8px; gap: 8px; }
-            .channel-thumb { width: 42px; height: 32px; font-size: 12px; }
-            .channel-info h4 { font-size: 11px; }
+            .channels-grid {
+                grid-template-columns: repeat(1, 1fr); /* ল্যাপটপে ১টি করে সুন্দর সোজা লিস্ট হবে */
+            }
         }
 
-        /* মোবাইল স্ক্রিন রোটেট (LANDSCAPE) করলে ভিডিও ফুলস্ক্রিন করার রুলস */
+        /* মোবাইল স্ক্রিন ল্যান্ডস্কেপ (রোটেট) ফুলস্ক্রিন রুলস */
         @media screen and (max-width: 932px) and (orientation: landscape) {
-            body, .app-container, .main-content {
+            body, .main-content {
                 margin: 0 !important;
                 padding: 0 !important;
                 width: 100vw !important;
                 height: 100vh !important;
                 overflow: hidden !important;
             }
-
-            .top-header, .scrollable-content-area, .category-section {
+            .top-header, .list-container-area, .app-footer {
                 display: none !important;
             }
-
-            .player-container {
+            .content-body, .player-container, .video-wrapper {
+                width: 100vw !important;
+                height: 100vh !important;
                 margin: 0 !important;
-                width: 100vw !important;
-                height: 100vh !important;
-            }
-
-            .video-wrapper {
-                width: 100vw !important;
-                height: 100vh !important;
                 border: none !important;
                 border-radius: 0 !important;
-                box-shadow: none !important;
                 aspect-ratio: auto !important;
             }
-
             video {
                 width: 100% !important;
                 height: 100% !important;
@@ -382,23 +354,20 @@
 </head>
 <body>
 
-    <div class="app-container">
+    <div class="main-content">
+        
+        <header class="top-header">
+            <div class="logo-section">
+                <h1>SA IPTV <span>BD LIVE</span></h1>
+            </div>
+            <div class="time-widget">
+                <i class="fa-regular fa-clock" style="color: #ff0022; margin-right: 5px;"></i> <span id="clock">--:-- --</span><br>
+                <span id="date">Loading...</span>
+            </div>
+        </header>
 
-        <main class="main-content">
+        <div class="content-body">
             
-            <header class="top-header">
-                <!-- লোগো এখন হেডার এর বাম পাশে থাকবে -->
-                <div class="logo-section">
-                    <h1>SA IPTV <span>BD LIVE</span></h1>
-                </div>
-                
-                <!-- ঘড়ির উইজেট হেডার এর ডান পাশে থাকবে -->
-                <div class="time-widget">
-                    <i class="fa-regular fa-clock" style="color: #ff0022; margin-right: 5px;"></i> <span id="clock">--:-- --</span><br>
-                    <span id="date">Loading...</span>
-                </div>
-            </header>
-
             <section class="player-container">
                 <div class="video-wrapper">
                     <div class="player-overlay-top" id="player-badge-overlay">
@@ -408,7 +377,7 @@
                 </div>
             </section>
 
-            <div class="scrollable-content-area">
+            <div class="list-container-area">
                 
                 <section class="category-section">
                     <div class="cat-header">
@@ -418,7 +387,6 @@
                             <i class="fa-solid fa-magnifying-glass"></i>
                         </div>
                     </div>
-                    
                     <div class="category-tags" id="category-buttons-container">
                         <div class="loading-text" style="font-size: 11px; padding:0;">Loading Categories...</div>
                     </div>
@@ -427,16 +395,17 @@
                 <section class="channels-grid" id="channels-container">
                     <div class="loading-text"><i class="fa-solid fa-spinner fa-spin"></i> Loading channels...</div>
                 </section>
-                <div id="no-results" class="no-results-msg">No channels found matching the criteria.</div>
-
-                <footer class="app-footer">
-                    <p>© 2026 SA IPTV BD LIVE</p>
-                    <p>Built with <span style="color: red;">&hearts;</span></p>
-                </footer>
+                <div id="no-results" class="no-results-msg">No channels found.</div>
                 
             </div>
 
-        </main>
+        </div>
+
+        <footer class="app-footer">
+            <p>© 2026 SA IPTV BD LIVE</p>
+            <p>Built with <span style="color: red;">&hearts;</span></p>
+        </footer>
+        
     </div>
 
     <script>
@@ -632,12 +601,9 @@
         };
 
         function playLiveStream(url, name) {
-            if (currentPlayingUrl === url && hlsPlayer) {
-                return; 
-            }
+            if (currentPlayingUrl === url && hlsPlayer) return; 
 
             currentPlayingUrl = url; 
-
             const badgeOverlay = document.getElementById('player-badge-overlay');
             document.getElementById('current-channel-title').innerText = name;
 
@@ -645,43 +611,21 @@
             if (badgeTimeout) clearTimeout(badgeTimeout);
             badgeTimeout = setTimeout(() => { badgeOverlay.style.opacity = "0"; }, 3000);
 
-            video.muted = false;
-            video.volume = 1.0;
-
             if (hlsPlayer) hlsPlayer.destroy();
 
             if (Hls.isSupported()) {
                 hlsPlayer = new Hls(aggressiveBufferConfig);
                 hlsPlayer.loadSource(url);
                 hlsPlayer.attachMedia(video);
-                
                 hlsPlayer.on(Hls.Events.MANIFEST_PARSED, function() {
-                    video.play().catch(() => { console.log("Autoplay prevented."); });
+                    video.play().catch(() => {});
                 });
-
-                hlsPlayer.on(Hls.Events.ERROR, function (event, data) {
-                    if (data.fatal) {
-                        switch (data.type) {
-                            case Hls.ErrorTypes.NETWORK_ERROR:
-                                hlsPlayer.startLoad();
-                                break;
-                            case Hls.ErrorTypes.MEDIA_ERROR:
-                                hlsPlayer.recoverMediaError();
-                                break;
-                            default:
-                                playLiveStream(url, name);
-                                break;
-                        }
-                    }
-                });
-
             } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
                 video.src = url;
                 video.addEventListener('loadedmetadata', function() {
                     video.play();
                 });
             }
-
             updatePlayingCardUI();
         }
 

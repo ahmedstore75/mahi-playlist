@@ -212,7 +212,18 @@
         .scrollable-content-area::-webkit-scrollbar { width: 6px; }
         .scrollable-content-area::-webkit-scrollbar-thumb { background: #ff0022; border-radius: 3px; }
 
-        /* ক্যাটাগরি হেডার */
+        /* ===================================================
+           ক্যাটাগরি এবং সার্চ বক্স স্টিকি (Sticky) করার রুলস
+           =================================================== */
+        .category-section {
+            position: sticky;
+            top: 0;
+            background-color: #0b0e14; /* স্ক্রল করার সময় পেছনের কন্টেন্ট যেন দেখা না যায় */
+            z-index: 50;
+            padding-top: 5px;
+            padding-bottom: 10px;
+        }
+
         .cat-header {
             display: flex;
             justify-content: space-between;
@@ -248,7 +259,7 @@
         .category-tags {
             display: flex;
             gap: 10px;
-            margin-bottom: 25px;
+            margin-bottom: 15px;
             overflow-x: auto;
             padding-bottom: 5px;
         }
@@ -454,7 +465,6 @@
                 <a onclick="syncCategory('International', this)" class="nav-item" data-cat="International"><i class="fa-solid fa-globe"></i> GLOBAL</a>
                 <a onclick="syncCategory('Education', this)" class="nav-item" data-cat="Education"><i class="fa-solid fa-graduation-cap"></i> EDUCATION</a>
                 <a onclick="syncCategory('VOD', this)" class="nav-item" data-cat="VOD"><i class="fa-solid fa-video"></i> VOD</a>
-                <a onclick="syncCategory('Favorites', this)" class="nav-item" data-cat="Favorites"><i class="fa-solid fa-heart"></i> FAVORITES</a>
             </nav>
 
             <div class="social-links">
@@ -484,6 +494,7 @@
 
             <div class="scrollable-content-area">
                 
+                <!-- ক্যাটাগরি সেকশন যা স্টিকি করা হয়েছে -->
                 <section class="category-section">
                     <div class="cat-header">
                         <h3>Categories</h3>
@@ -506,7 +517,6 @@
                         <button class="cat-btn" data-cat="International" onclick="syncCategory('International', this)">🌍 International</button>
                         <button class="cat-btn" data-cat="Education" onclick="syncCategory('Education', this)">🎓 Education</button>
                         <button class="cat-btn" data-cat="VOD" onclick="syncCategory('VOD', this)">🎥 VOD</button>
-                        <button class="cat-btn" data-cat="Favorites" onclick="syncCategory('Favorites', this)">⭐ Favorites</button>
                     </div>
                 </section>
 
@@ -631,12 +641,6 @@
         }
 
         function handleSearchInput() {
-            const searchQuery = document.getElementById('search').value.trim();
-            
-            if (searchQuery.length > 0 && currentSelectedCategory !== "ALL") {
-                currentSelectedCategory = "ALL";
-                updateCategoryActiveUI("ALL");
-            }
             filterChannels();
         }
 
@@ -674,6 +678,7 @@
                 if (currentSelectedCategory === "ALL") {
                     matchesCategory = true;
                 } else {
+                    // M3U প্লেলিস্টের group-title এর সাথে ক্যাটাগরি ম্যাচ করানো হচ্ছে
                     matchesCategory = cardGroup.includes(currentSelectedCategory.toLowerCase());
                 }
 

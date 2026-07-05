@@ -28,69 +28,34 @@
             height: 100vh; 
         }
 
-        /* বাম পাশের সাইডবার (শুধু লোগো ও সোশ্যাল লিংকের জন্য) */
-        .sidebar {
-            width: 240px;
-            background-color: #000000;
-            padding: 20px 15px;
+        /* ডান পাশের মেইন কন্টেন্ট এরিয়া (এখন এটিই পুরো স্ক্রিন জুড়ে থাকবে) */
+        .main-content {
+            flex-grow: 1;
+            padding: 20px 30px;
+            width: 100%;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
-            border-right: 1px solid #1a1a1a;
-            position: fixed;
             height: 100vh;
-            z-index: 100;
+        }
+
+        /* টপ হেডার সজ্জা */
+        .top-header {
+            display: flex;
+            justify-content: space-between; /* লোগো বামে এবং ঘড়ি ডানে রাখবে */
+            align-items: center;
+            margin-bottom: 15px;
             flex-shrink: 0;
         }
 
+        /* লোগো টেক্সট স্টাইল */
         .logo-section h1 {
-            font-size: 16px;
+            font-size: 18px;
             color: #ffffff;
-            margin-bottom: 20px;
             font-weight: 700;
-            line-height: 1.3;
+            letter-spacing: 0.5px;
         }
         .logo-section h1 span {
             color: #ff0022;
-            display: inline-block;
-        }
-
-        .social-links {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            padding-top: 15px;
-            border-top: 1px solid #111;
-            flex-shrink: 0;
-        }
-
-        .social-links a {
-            color: #b3b3b3;
-            font-size: 16px;
-            transition: 0.3s;
-            text-decoration: none;
-        }
-
-        .social-links a:hover {
-            color: #ff0022;
-        }
-
-        /* ডান পাশের মেইন কন্টেন্ট এরিয়া */
-        .main-content {
-            margin-left: 240px;
-            flex-grow: 1;
-            padding: 20px 30px;
-            width: calc(100% - 240px);
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-        }
-
-        .top-header {
-            display: flex;
-            justify-content: flex-end;
-            margin-bottom: 15px;
-            flex-shrink: 0;
         }
 
         .time-widget {
@@ -98,6 +63,7 @@
             font-size: 16px;
             color: #ffffff;
             font-weight: bold;
+            line-height: 1.2;
         }
 
         .time-widget span {
@@ -357,26 +323,12 @@
 
         /* MOBILE NORMAL SCREEN RE-FIT */
         @media screen and (max-width: 768px) {
-            .sidebar {
-                width: 75px; 
-                padding: 15px 4px 10px 4px;
-            }
-            
-            .logo-section h1 {
-                font-size: 10px;
-                text-align: center;
-                line-height: 1.2;
-                margin-bottom: 15px;
-            }
-            .logo-section h1 span { display: block; }
-
-            .social-links { gap: 8px; padding-top: 10px; }
-            .social-links a { font-size: 13px; }
-
             .main-content {
-                margin-left: 75px;
-                width: calc(100% - 75px);
                 padding: 12px;
+            }
+
+            .logo-section h1 {
+                font-size: 14px;
             }
 
             .time-widget { font-size: 13px; }
@@ -391,9 +343,7 @@
             .channel-info h4 { font-size: 11px; }
         }
 
-        /* ===================================================
-           মোবাইল স্ক্রিন রোটেট (LANDSCAPE) করলে ভিডিও ফুলস্ক্রিন করার রুলস
-           =================================================== */
+        /* মোবাইল স্ক্রিন রোটেট (LANDSCAPE) করলে ভিডিও ফুলস্ক্রিন করার রুলস */
         @media screen and (max-width: 932px) and (orientation: landscape) {
             body, .app-container, .main-content {
                 margin: 0 !important;
@@ -403,12 +353,10 @@
                 overflow: hidden !important;
             }
 
-            /* সাইডবার এবং অন্যান্য কন্টেন্ট হাইড হবে */
-            .sidebar, .top-header, .scrollable-content-area, .category-section {
+            .top-header, .scrollable-content-area, .category-section {
                 display: none !important;
             }
 
-            /* প্লেয়ারকে পুরো স্ক্রিনে ফিট করা */
             .player-container {
                 margin: 0 !important;
                 width: 100vw !important;
@@ -427,7 +375,7 @@
             video {
                 width: 100% !important;
                 height: 100% !important;
-                object-fit: fill !important; /* স্ক্রিন অনুযায়ী পুরোপুরি স্ট্রেচ বা ফিট হবে */
+                object-fit: fill !important; 
             }
         }
     </style>
@@ -435,23 +383,16 @@
 <body>
 
     <div class="app-container">
-        
-        <!-- সাইডবার (বাম দিকের মেনু অপশন বাদ দেওয়া হয়েছে) -->
-        <aside class="sidebar">
-            <div class="logo-section">
-                <h1>SA IPTV <br><span>BD LIVE</span></h1>
-            </div>
-
-            <div class="social-links">
-                <a href="https://www.facebook.com/ahmed.bd.fb" target="_blank"><i class="fa-brands fa-facebook"></i></a>
-                <a href="https://telegram.org" target="_blank"><i class="fa-brands fa-telegram"></i></a>
-                <a href="https://youtube.com" target="_blank"><i class="fa-brands fa-youtube"></i></a>
-            </div>
-        </aside>
 
         <main class="main-content">
             
             <header class="top-header">
+                <!-- লোগো এখন হেডার এর বাম পাশে থাকবে -->
+                <div class="logo-section">
+                    <h1>SA IPTV <span>BD LIVE</span></h1>
+                </div>
+                
+                <!-- ঘড়ির উইজেট হেডার এর ডান পাশে থাকবে -->
                 <div class="time-widget">
                     <i class="fa-regular fa-clock" style="color: #ff0022; margin-right: 5px;"></i> <span id="clock">--:-- --</span><br>
                     <span id="date">Loading...</span>
@@ -478,7 +419,6 @@
                         </div>
                     </div>
                     
-                    <!-- ওপরে স্ক্রল করার বাটনগুলো ডাইনামিকালি তৈরি হবে -->
                     <div class="category-tags" id="category-buttons-container">
                         <div class="loading-text" style="font-size: 11px; padding:0;">Loading Categories...</div>
                     </div>
@@ -580,7 +520,6 @@
             }
         }
 
-        // শুধু ওপরের টপ বারের জন্য ক্যাটাগরি বাটন জেনারেট করা হচ্ছে
         function buildDynamicCategoryUI() {
             const tagsContainer = document.getElementById('category-buttons-container');
             tagsContainer.innerHTML = `<button class="cat-btn active" data-cat="ALL" onclick="syncCategory('ALL', this)">ALL</button>`;

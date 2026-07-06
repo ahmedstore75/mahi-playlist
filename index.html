@@ -194,6 +194,7 @@
             gap: 8px;
             overflow-x: auto;
             padding-bottom: 5px;
+            scroll-behavior: smooth; /* মাউস স্ক্রলিং যাতে স্মুথ দেখায় */
         }
         .category-tags::-webkit-scrollbar { height: 4px; }
         .category-tags::-webkit-scrollbar-thumb { background: #2a2f3b; border-radius: 2px; }
@@ -433,7 +434,7 @@
 
     <script>
         let currentSelectedCategory = "ALL"; 
-        let lastUserSelectedCategory = "ALL"; // ইউজারের শেষ সিলেক্ট করা ক্যাটাগরি মনে রাখার জন্য
+        let lastUserSelectedCategory = "ALL"; 
         let badgeTimeout = null;
         let currentPlayingUrl = ""; 
         let allChannels = [];
@@ -507,6 +508,7 @@
             
             buildDynamicCategoryUI(); 
             buildInitialDOMChannels(); 
+            enableCategoryMouseWheelScroll(); // মাউস স্ক্রলিং একটিভেট করার ফাংশন কল
 
             if (allChannels.length > 0 && currentPlayingUrl === "") {
                 playLiveStream(allChannels[0].url, allChannels[0].name);
@@ -525,6 +527,17 @@
                 catBtn.innerText = cat;
                 tagsContainer.appendChild(catBtn);
             });
+        }
+
+        // ল্যাপটপ/পিসি মাউস হুইল দিয়ে ডান-বামে ক্যাটাগরি স্ক্রল করার স্মার্ট ফিচার
+        function enableCategoryMouseWheelScroll() {
+            const catContainer = document.getElementById('category-buttons-container');
+            if (catContainer) {
+                catContainer.addEventListener('wheel', (evt) => {
+                    evt.preventDefault(); // ওপরে-নিচে স্ক্রল হওয়া বন্ধ করবে
+                    catContainer.scrollLeft += evt.deltaY; // মাউসের চাকার ওপর-নিচের মুভমেন্টকে ডান-বামে কনভার্ট করবে
+                });
+            }
         }
 
         function buildInitialDOMChannels() {
@@ -557,16 +570,13 @@
             filterChannels();
         }
 
-        // স্মার্ট গ্লোবাল সার্চ হ্যান্ডলার
         function handleSearchInput() {
             const searchQuery = document.getElementById('search').value.trim();
             
             if (searchQuery.length > 0) {
-                // সার্চ বক্সে কিছু লিখলে ক্যাটাগরি ফিল্টার সাময়িকভাবে 'ALL' হয়ে যাবে
                 currentSelectedCategory = "ALL";
                 updateCategoryActiveUI("ALL");
             } else {
-                // সার্চ বক্স একদম খালি করে দিলে আগের ক্যাটাগরিতে ফিরে যাবে
                 currentSelectedCategory = lastUserSelectedCategory;
                 updateCategoryActiveUI(lastUserSelectedCategory);
             }
@@ -574,9 +584,9 @@
         }
 
         function syncCategory(categoryName, element) {
-            document.getElementById('search').value = ""; // ক্যাটাগরি ক্লিক করলে সার্চ রিসেট হবে
+            document.getElementById('search').value = ""; 
             currentSelectedCategory = categoryName;
-            lastUserSelectedCategory = categoryName; // ইউজারের চয়েস সেভ করে রাখা হলো
+            lastUserSelectedCategory = categoryName; 
             updateCategoryActiveUI(categoryName);
             filterChannels(); 
         }

@@ -43068,8 +43068,8 @@ https://bozztv.com/rongo/rongo-SangsadTV/index.m3u8
 #=================================
 # 🖥️ Developed by: Monirul Islam
 # 🔗 Telegram: https://t.me/monirul_Islam_SM
-# 🕒 Last Updated: 2026-07-26 01:01:53 (BD Time)
-# 📺 Channels Count: 433
+# 🕒 Last Updated: 2026-07-26 02:01:58 (BD Time)
+# 📺 Channels Count: 431
 # 🔒 Usage: Personal / Educational
 #=================================
 
@@ -44279,14 +44279,8 @@ https://bd-mc-pdlive.fancode.com/mumbai/4246804_english_hls_4519eb4cde71293_1ta-
 #EXTINF:-1 tvg-id="tapmad-15335" tvg-logo="https://d34080pnh6e62j.cloudfront.net/images/channels/mobile_large/17845507451020x576.jpg" group-title="Tapmad", West indies vs Pakistan | Pakistan Tour of West Indies 2026
 https://saseries.akamaized.net/hls/live/2110097/PAKvsWI-TesT-tapmad/master.m3u8
 
-#EXTINF:-1 tvg-id="tapmad-14954" tvg-logo="https://d34080pnh6e62j.cloudfront.net/images/channels/mobile_large/17847974191020x576.jpg" group-title="Tapmad", Ankalaev vs Guskov | UFC 2026
-https://saseries.akamaized.net/hls/live/2110097/56408643-tapMad/master.m3u8
-
 #EXTINF:-1 tvg-id="tapmad-15188" tvg-logo="https://d34080pnh6e62j.cloudfront.net/images/channels/mobile_large/17848779031020x576men.jpg" group-title="Tapmad", Welsh Fire vs MI London | The Hundred Men's Competition 2026
 https://d8j84o343a5m2.cloudfront.net/live/testtapmad2/master.m3u8
-
-#EXTINF:-1 tvg-id="tapmad-15384" tvg-logo="https://d34080pnh6e62j.cloudfront.net/images/channels/mobile_large/17848783901020x576.jpg" group-title="Tapmad", EA Sports FC 26 - Day 4 | Esports World Cup 2026 (EWC)
-https://multiregion-asia-cdn.tapmad.com/v1/019f067c253015e8f412028003fe/019f067d5e3615e8f060213b29a21b/main.m3u8
 
 #EXTINF:-1 group-title="Toffee" tvg-logo="https://assets-prod.services.toffeelive.com/DNMXs5UBm1RY_In7IJ72/posters/5638c4e8-36ba-4e8e-848e-233183b3ec17.png",Toffee Dramas
 #EXTVLCOPT:http-user-agent=okhttp/5.1.0

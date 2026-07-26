@@ -43116,8 +43116,8 @@ https://bozztv.com/rongo/rongo-SangsadTV/index.m3u8
 #=================================
 # 🖥️ Developed by: Monirul Islam
 # 🔗 Telegram: https://t.me/monirul_Islam_SM
-# 🕒 Last Updated: 2026-07-27 01:01:49 (BD Time)
-# 📺 Channels Count: 432
+# 🕒 Last Updated: 2026-07-27 02:02:05 (BD Time)
+# 📺 Channels Count: 431
 # 🔒 Usage: Personal / Educational
 #=================================
 
@@ -44329,9 +44329,6 @@ https://saseries.akamaized.net/hls/live/2110097/D2PAKvsWI-TesT-tapmad/master.m3u
 
 #EXTINF:-1 tvg-id="tapmad-15190" tvg-logo="https://d34080pnh6e62j.cloudfront.net/images/channels/mobile_large/17848910051020x576men.jpg" group-title="Tapmad", Trent Rockets vs London Spirit | The Hundred Men's Competition 2026
 https://saseries.akamaized.net/hls/live/2110097/ZIMvsIND-3827e1/master.m3u8
-
-#EXTINF:-1 tvg-id="tapmad-15385" tvg-logo="https://d34080pnh6e62j.cloudfront.net/images/channels/mobile_large/17848938841020x576.jpg" group-title="Tapmad", EA Sports FC 26 - Day 5 | Esports World Cup 2026 (EWC)
-https://serieAleague.akamaized.net/hls/live/2107107/tap-BK-PSL-D1-E/master.m3u8
 
 #EXTINF:-1 group-title="Toffee" tvg-logo="https://assets-prod.services.toffeelive.com/DNMXs5UBm1RY_In7IJ72/posters/5638c4e8-36ba-4e8e-848e-233183b3ec17.png",Toffee Dramas
 #EXTVLCOPT:http-user-agent=okhttp/5.1.0

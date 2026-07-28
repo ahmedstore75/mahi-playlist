@@ -42891,8 +42891,8 @@ https://bozztv.com/rongo/rongo-SangsadTV/index.m3u8
 #=================================
 # 🖥️ Developed by: Monirul Islam
 # 🔗 Telegram: https://t.me/monirul_Islam_SM
-# 🕒 Last Updated: 2026-07-29 03:02:01 (BD Time)
-# 📺 Channels Count: 331
+# 🕒 Last Updated: 2026-07-29 04:01:51 (BD Time)
+# 📺 Channels Count: 329
 # 🔒 Usage: Personal / Educational
 #=================================
 
@@ -43789,12 +43789,6 @@ https://fifa.assadikb.workers.dev/?id=zee_tv_hd
 
 #EXTINF:-1 tvg-name="World Feed 1 [LIVE]" tvg-logo="https://www.fancode.com/skillup-uploads/cms-media/Mubadala_Web-match-card.png" group-title="Fancode",World Feed 1 [LIVE]
 https://bd-mc-pdlive.fancode.com/mumbai/143641_english_hls_172b098b4923302_1ta-di_h264/index.m3u8
-
-#EXTINF:-1 tvg-id="tapmad-15335" tvg-logo="https://d34080pnh6e62j.cloudfront.net/images/channels/mobile_large/17845507451020x576.jpg" group-title="Tapmad", West indies vs Pakistan | Pakistan Tour of West Indies 2026
-https://saseries.akamaized.net/hls/live/2110097/D2PAKvsWI-TesT-tapmad/master.m3u8
-
-#EXTINF:-1 tvg-id="tapmad-15192" tvg-logo="https://d34080pnh6e62j.cloudfront.net/images/channels/mobile_large/17851553371020x576men.jpg" group-title="Tapmad", Sunrisers Leeds vs Manchester Super Giants | The Hundred Men's Competition 2026
-https://saseries.akamaized.net/hls/live/2110097/ZIMvsIND-3827e1/master.m3u8
 
 #EXTINF:-1 group-title="Toffee" tvg-logo="https://assets-prod.services.toffeelive.com/DNMXs5UBm1RY_In7IJ72/posters/5638c4e8-36ba-4e8e-848e-233183b3ec17.png",Toffee Dramas
 #EXTVLCOPT:http-user-agent=okhttp/5.1.0

@@ -23,7 +23,7 @@ jobs:
 
           curl -L "https://raw.githubusercontent.com/bugsfreeweb/LiveTVCollector/refs/heads/main/LiveTV/Bangladesh/LiveTV.m3u" -o three.m3u
           
-          curl -L "https://raw.githubusercontent.com/sm-monirulislam/SM-Live-TV/refs/heads/main/Combined_Live_TV.m3u" -o four.m3u
+          curl -L "https://raw.githubusercontent.com/sm-monirulislam/SM-IPTV/refs/heads/main/Combined_Live_TV.m3u" -o four.m3u
 
       - name: Merge
         run: |
